@@ -28,15 +28,15 @@ void ThreadPool::start() {
 
 /// submits tasks for execution
 /// [condition] : it must be called after start() and before stop()
-void ThreadPool::submit(Task task) {
+void ThreadPool::submit(Task&& procedure) {
     // just ensure here that user follows the pool's lifecycle 'contract'
     assert(started_ && !stopped_);
 
-    if (!task) {
+    if (!procedure) {
         return;
     }
 
-    tasks_.push(std::move(task));
+    tasks_.push(std::move(procedure));
 }
 
 /// Stops the pool [waits for all worker threads to finish]

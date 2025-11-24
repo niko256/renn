@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Coroutine/Routine.hpp"
+#include "../Scheduling/Task.hpp"
 #include "Fiber.hpp"
 
 namespace ds::fiber {
 
-void go(runtime::Scheduler&, runtime::Routine);
+void go(runtime::Scheduler&, runtime::task::Task&&);
 
-void go(runtime::Routine);
+void go(runtime::task::Task&&);
 
 };  // namespace ds::fiber

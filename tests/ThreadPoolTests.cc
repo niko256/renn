@@ -1,4 +1,4 @@
-#include "../src/Concurrency/ThreadPool/ThreadPool.hpp"
+#include "../src/Concurrency/Scheduling/ThreadPool/ThreadPool.hpp"
 #include "../src/Concurrency/WaitGroup/WaitGroup.hpp"
 #include <atomic>
 #include <future>

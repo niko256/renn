@@ -1,9 +1,5 @@
 #pragma once
 
-#include <functional>
+#include <function2/function2.hpp>
 
-namespace ds::runtime {
-
-using Routine = std::function<void()>;
-
-};  // namespace ds::runtime
+using Routine = fu2::unique_function<void()>;

@@ -1,0 +1,13 @@
+ADD_LIBRARY(Scheduling INTERFACE)
+
+TARGET_SOURCES(Scheduling INTERFACE
+  ${CMAKE_CURRENT_SOURCE_DIR}/IScheduler.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Task.hpp
+)
+
+TARGET_LINK_LIBRARIES(Scheduling INTERFACE
+  third_party_function2
+)
+
+ADD_SUBDIRECTORY(ThreadPool)
+#ADD_SUBDIRECTORY(Sandbox)

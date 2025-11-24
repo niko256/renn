@@ -1,9 +1,15 @@
-ADD_LIBRARY(Fiber STATIC Fiber.cc Yield.cc Go.cc)
+ADD_LIBRARY(Fiber STATIC
+  Fiber.cc
+  Yield.cc
+  Go.cc
+  Handle.cc
+)
 
 
 TARGET_LINK_LIBRARIES(Fiber PUBLIC
   third_party_vvv
   Coroutine
+  Scheduling
 )
 
 

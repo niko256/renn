@@ -2,7 +2,7 @@
 
 #include "../Coroutine/Coro.hpp"
 #include "../Coroutine/Routine.hpp"
-#include "../ThreadPool/ThreadPool.hpp"
+#include "../Scheduling/ThreadPool/ThreadPool.hpp"
 #include <vvv/list.hpp>
 
 namespace ds::runtime {

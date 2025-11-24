@@ -1,10 +1,11 @@
 #pragma once
 
+#include "../IScheduler.hpp"
+#include "../Task.hpp"
 #include "Queue.hpp"
 #include <atomic>
 #include <cassert>
 #include <cstddef>
-#include <functional>
 #include <thread>
 #include <vector>
 
@@ -14,9 +15,37 @@ namespace ds::runtime {
 // as polymorphic wrapper for callable objects
 // it can store everything that can act like a function (lambda, functor, ptr to method, classic function)
 // it doesn't accept and return any arguments
-using Task = std::function<void()>;
+// MOVABLE
+using Task = ds::runtime::task::Task;
 
-class ThreadPool {
+class ThreadPool : public sched::IScheduler {
+  public:
+    explicit ThreadPool(size_t num_threads);
+
+    ~ThreadPool() override;
+
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool(ThreadPool&&) noexcept = delete;
+
+    void start();
+
+    void stop();
+
+    static ThreadPool* current();
+
+    void submit(Task&& procedure) override;
+
+    /// TODO : [FEATURE] Implement std::future-based version of submit method for tasks that return values
+    /// [this would allow the pool to handle tasks that return values]
+    ///
+    /// The signature should looks like:
+    ///
+    /// template <typename Func, typename... Args>
+    /// auto submit(Func&& func, Args&&... args) -> std::future<decltype(func(args...))>;
+
+  private:
+    void worker_loop();
+
   private:
     UnboundedBlockingQueue<Task> tasks_;
     const size_t num_threads_;
@@ -32,7 +61,7 @@ class ThreadPool {
     std::atomic<bool> stopped_;
 
     /// TODO::: to ensure that using two atomic flags is a better choice than using an atomic state
-    /// [tbh idk, but maybe alignment to cache-line, bc enum is just 1 byte]
+    /// ...alignment to cache-line, bc enum is just 1 byte...??
     ///
     // enum class State {
     //     Idle,     // Initial state
@@ -45,33 +74,6 @@ class ThreadPool {
     // A thread-local pointer to the current ThreadPool instance
     // each thread gets its own copy of this variable
     inline static thread_local ThreadPool* current_pool_ = nullptr;
-
-
-  public:
-    explicit ThreadPool(size_t num_threads);
-
-    ~ThreadPool();
-
-    ThreadPool(const ThreadPool&) = delete;
-    ThreadPool(ThreadPool&&) noexcept = delete;
-
-    void start();
-
-    void stop();
-
-    static ThreadPool* current();
-
-    void submit(Task task);
-
-    /// TODO : [FEATURE] Implement std::future-based version of submit method for tasks that return values
-    /// [this would allow the pool to handle tasks that return values]
-    ///
-    /// The signature should looks like:
-    ///
-    /// template <typename Func, typename... Args>
-    /// auto submit(Func&& func, Args&&... args) -> std::future<decltype(func(args...))>;
-
-  private:
-    void worker_loop();
 };
+
 };  // namespace ds::runtime
