@@ -1,11 +1,8 @@
 #include "../src/Scheduling/ThreadPool/ThreadPool.hpp"
-#include "../src/WaitGroup/WaitGroup.hpp"
+#include "../src/Sync/WaitGroup.hpp"
 
-#include "../src/Fiber/Fiber.hpp"
-#include "../src/Fiber/Go.hpp"
-#include "../src/Future/Event.hpp"
-#include "Fiber.hpp"
-#include "Go.hpp"
+#include "../src/Fiber/Core/Fiber.hpp"
+#include "../src/Fiber/ExeCtrl/Go.hpp"
 #include <arpa/inet.h>
 #include <filesystem>
 #include <format>

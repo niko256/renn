@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Utils/Callback.hpp"
-#include "../Utils/Result.hpp"
+#include "../../Utils/Callback.hpp"
+#include "../../Utils/Result.hpp"
 #include "StateMachine.hpp"
 
 namespace renn {
@@ -21,5 +21,7 @@ class SharedState {
     utils::Result<T> result_;
     Callback<T> callback_;
 };
+
+/* ///////////////////////////////////////////////////////////// */
 
 };  // namespace renn

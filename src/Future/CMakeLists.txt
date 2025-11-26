@@ -1,26 +1,11 @@
-SET(MAIN_HEADERS
-  Future.hpp
-  Promise.hpp
-  Event.hpp
-  SharedState.hpp
-  StateMachine.hpp
-)
+# =============================================
+# === Core : header-only
 
-SET(IMPL_HEADERS
-  Impl/Future_inl.hpp
-  Impl/Promise_inl.hpp
-  Impl/SharedState_inl.hpp
-)
+ADD_LIBRARY(FutureCore INTERFACE)
 
-ADD_LIBRARY(Future INTERFACE)
-
-TARGET_SOURCES(Future INTERFACE
-  ${MAIN_HEADERS}
-  ${IMPL_HEADERS}
-)
-
-TARGET_INCLUDE_DIRECTORIES(Future INTERFACE
-  ${CMAKE_CURRENT_SOURCE_DIR}
+TARGET_INCLUDE_DIRECTORIES(FutureCore INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Core>
+    $<INSTALL_INTERFACE:include/Future/Core>
 )
 
 IF (futex_like_POPULATED)
@@ -29,13 +14,46 @@ IF (futex_like_POPULATED)
   )
 ENDIF()
 
-TARGET_LINK_LIBRARIES(Future INTERFACE
+TARGET_LINK_LIBRARIES(FutureCore INTERFACE
   third_party_futex_like
   Utils
 )
 
-GET_TARGET_PROPERTY(future_incs Future INTERFACE_INCLUDE_DIRECTORIES)
-message(STATUS "Future include dirs: ${future_incs}")
+# =============================================
+# === Combinators : compiled free functions ===
 
-GET_TARGET_PROPERTY(future_libs Future INTERFACE_LINK_LIBRARIES)
-message(STATUS "Future link libs: ${future_libs}")
+SET(COMBINATORS_SOURCES
+  Combinators/Impl/Bind.cc
+  Combinators/Impl/Detach.cc
+  Combinators/Impl/FlatMap.cc
+  Combinators/Impl/Flatten.cc
+  Combinators/Impl/Get.cc
+  Combinators/Impl/Just.cc
+  Combinators/Impl/Map.cc
+  Combinators/Impl/Spawn.cc
+  Combinators/Impl/Value.cc
+)
+
+ADD_LIBRARY(FutureCombinators STATIC
+  ${COMBINATORS_SOURCES}
+)
+
+TARGET_INCLUDE_DIRECTORIES(FutureCombinators PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Combinators>
+  $<INSTALL_INTERFACE:include/Future/Combinators>
+)
+
+TARGET_LINK_LIBRARIES(FutureCombinators PUBLIC
+  FutureCore
+  Utils
+)
+
+# =============================================
+# === Umbrella target ===
+
+ADD_LIBRARY(Future INTERFACE)
+
+TARGET_LINK_LIBRARIES(Future INTERFACE
+  FutureCore
+  FutureCombinators
+)

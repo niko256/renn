@@ -37,5 +37,5 @@ class UnboundedBlockingQueue {
     void close();
 };
 
-#include "Queue_inl.hpp"
+#include "Queue-inl.hpp"
 };  // namespace renn

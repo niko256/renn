@@ -1,4 +1,4 @@
-#include "../src/Spinlock/Spinlock.hpp"
+#include "../src/Sync/Spinlock/Spinlock.hpp"
 #include "gtest/gtest.h"
 #include <atomic>
 #include <chrono>

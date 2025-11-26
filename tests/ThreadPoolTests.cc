@@ -1,5 +1,5 @@
 #include "../src/Scheduling/ThreadPool/ThreadPool.hpp"
-#include "../src/WaitGroup/WaitGroup.hpp"
+#include "../src/Sync/WaitGroup.hpp"
 #include <atomic>
 #include <future>
 #include <gtest/gtest.h>

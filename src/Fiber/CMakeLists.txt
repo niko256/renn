@@ -1,8 +1,26 @@
+SET(FIBER_CORE_SOURCES
+  Core/Fiber.cc
+  Core/Handle.cc
+)
+
+SET(FIBER_FFS_SOURCES
+  ExeCtrl/Go.cc
+  ExeCtrl/Yield.cc
+  ExeCtrl/SleepFor.cc
+)
+
+
 ADD_LIBRARY(Fiber STATIC
-  Fiber.cc
-  Yield.cc
-  Go.cc
-  Handle.cc
+  ${FIBER_CORE_SOURCES}
+  ${FIBER_FFS_SOURCES}
+)
+
+
+TARGET_INCLUDE_DIRECTORIES(Fiber PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Core>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ExeCtrl>
+  $<INSTALL_INTERFACE:include/Fiber>
 )
 
 
@@ -10,10 +28,4 @@ TARGET_LINK_LIBRARIES(Fiber PUBLIC
   third_party_vvv
   Coroutine
   Scheduling
-)
-
-
-TARGET_INCLUDE_DIRECTORIES(Fiber PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include/DataStructures/Concurrency/Fiber>
 )

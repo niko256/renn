@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Utils/Result.hpp"
+#include "../../Utils/Result.hpp"
 #include "Future.hpp"
 #include "SharedState.hpp"
 
@@ -16,5 +16,7 @@ class Promise {
     SharedState<T>* state_;
     Future<T> future_;
 };
+
+/* ///////////////////////////////////////////////////////////// */
 
 };  // namespace renn

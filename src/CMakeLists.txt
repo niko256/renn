@@ -1,18 +1,16 @@
-ADD_SUBDIRECTORY(Spinlock)
 ADD_SUBDIRECTORY(Scheduling)
-# ADD_SUBDIRECTORY(WaitGroup)
 ADD_SUBDIRECTORY(Fiber)
 ADD_SUBDIRECTORY(Coroutine)
 ADD_SUBDIRECTORY(Future)
 ADD_SUBDIRECTORY(Utils)
+ADD_SUBDIRECTORY(Sync)
 
 ADD_LIBRARY(Concurrency INTERFACE)
 
 TARGET_LINK_LIBRARIES(Concurrency INTERFACE
-  Spinlock
+  Sync
   Scheduling
   Coroutine
   Fiber
-  WaitGroup
   Future
 )
