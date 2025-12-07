@@ -1,5 +1,5 @@
 #include "../src/Scheduling/ThreadPool/ThreadPool.hpp"
-#include "../src/Sync/WaitGroup.hpp"
+#include "../src/Sync/WaitGroup/WaitGroup.hpp"
 
 #include "../src/Fiber/Core/Fiber.hpp"
 #include "../src/Fiber/ExeCtrl/Go.hpp"

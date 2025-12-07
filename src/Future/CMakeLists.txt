@@ -1,5 +1,4 @@
-# =============================================
-# === Core : header-only
+# === Core : header-only ===
 
 ADD_LIBRARY(FutureCore INTERFACE)
 
@@ -7,12 +6,6 @@ TARGET_INCLUDE_DIRECTORIES(FutureCore INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Core>
     $<INSTALL_INTERFACE:include/Future/Core>
 )
-
-IF (futex_like_POPULATED)
-  TARGET_INCLUDE_DIRECTORIES(Future INTERFACE
-    ${futex_like_SOURCE_DIR}/source
-  )
-ENDIF()
 
 TARGET_LINK_LIBRARIES(FutureCore INTERFACE
   third_party_futex_like
@@ -32,6 +25,8 @@ SET(COMBINATORS_SOURCES
   Combinators/Impl/Map.cc
   Combinators/Impl/Spawn.cc
   Combinators/Impl/Value.cc
+  Combinators/Impl/First.cc
+  Combinators/Impl/After.cc
 )
 
 ADD_LIBRARY(FutureCombinators STATIC

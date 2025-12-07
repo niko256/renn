@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Sync/Event.hpp"
+#include "../../Sync/Event/Event.hpp"
 #include "SharedState.hpp"
 #include <../../Utils/Result.hpp>
 
