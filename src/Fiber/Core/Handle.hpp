@@ -6,7 +6,7 @@ class Fiber;
 
 class FiberHandle {
   public:
-    explicit FiberHandle(Fiber* fiber) : fiber_(fiber) {}
+    explicit FiberHandle(Fiber* fiber);
 
     FiberHandle() = default;
 

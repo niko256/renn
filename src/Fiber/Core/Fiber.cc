@@ -2,6 +2,7 @@
 #include "Coro.hpp"
 #include "Handle.hpp"
 #include "Syscalls.hpp"
+#include <cassert>
 
 namespace renn {
 

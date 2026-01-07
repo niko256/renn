@@ -1,5 +1,7 @@
 #include "Handle.hpp"
+#include "Fiber.hpp"
 #include <algorithm>
+#include <cassert>
 #include <utility>
 
 namespace renn {
