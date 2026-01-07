@@ -12,21 +12,11 @@ TARGET_LINK_LIBRARIES(FutureCore INTERFACE
   Utils
 )
 
-# =============================================
-# === Combinators : compiled free functions ===
+# =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+# =*= Combinators : compiled free functions =*=
 
 SET(COMBINATORS_SOURCES
-  Combinators/Impl/Bind.cc
-  Combinators/Impl/Detach.cc
-  Combinators/Impl/FlatMap.cc
-  Combinators/Impl/Flatten.cc
-  Combinators/Impl/Get.cc
-  Combinators/Impl/Just.cc
-  Combinators/Impl/Map.cc
-  Combinators/Impl/Spawn.cc
-  Combinators/Impl/Value.cc
-  Combinators/Impl/First.cc
-  Combinators/Impl/After.cc
+# ...
 )
 
 ADD_LIBRARY(FutureCombinators STATIC
@@ -43,8 +33,8 @@ TARGET_LINK_LIBRARIES(FutureCombinators PUBLIC
   Utils
 )
 
-# =============================================
-# === Umbrella target ===
+# =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+# =*= Umbrella target =*=
 
 ADD_LIBRARY(Future INTERFACE)
 
