@@ -28,7 +28,7 @@ class SharedState {
     std::optional<UnpackedCallback<T>> callback_;
 };
 
-/* ///////////////////////////////////////////////////////////// */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 template <typename T>
 void SharedState<T>::consume(UnpackedCallback<T> cb) {
@@ -51,8 +51,8 @@ void SharedState<T>::produce(utils::Result<T> res) {
 template <typename T>
 void SharedState<T>::tryst() {
     /* [Pre-condition] :
-     *  > result is set => producer comes to the shared state
-     *  > callback is set => consumer comes to shared state
+     *  > result is set => producer visited shared state
+     *  > callback is set => consumer visited shared state
      */
     if (result_) {
         (*callback_)(std::move(result_));

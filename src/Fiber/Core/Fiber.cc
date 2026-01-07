@@ -7,7 +7,7 @@ namespace renn {
 
 thread_local Fiber* Fiber::current_ = nullptr;
 
-Fiber::Fiber(sched::IScheduler& sched, Routine routine)
+Fiber::Fiber(sched::IExecutor& sched, Routine routine)
     : coro_(std::move(routine)),
       sched_(sched),
       reason_(YieldTag{}) {}
@@ -63,7 +63,7 @@ Coroutine& Fiber::get_coro() {
 }
 
 /* get internal scheduler */
-sched::IScheduler& Fiber::current_scheduler() const {
+sched::IExecutor& Fiber::current_scheduler() const {
     return sched_;
 }
 };  // namespace renn

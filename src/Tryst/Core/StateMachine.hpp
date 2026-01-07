@@ -7,14 +7,14 @@ namespace renn::tryst {
 
 /**
  * @enum States
- * @brief State flags for the rendezvouz pattern
+ * @brief State flags for the rendezvouz pattern.
  *
  * This enum represents possible states in consumer-producer handshake.
  *
  * => Protocol ensures that either :
  *  > Consumer arrives first, waits for producer
  *  > Producer arrives first, waits for consumer
- *  > Both arrive simultaneously (race condition handled by atomic fetch_or operation)
+ *  > Both arrive simultaneously
  */
 
 enum States : uint64_t {
@@ -40,13 +40,13 @@ class StateMachine {
     std::atomic<uint64_t> state_{States::INIT};
 };
 
-/* ///////////////////////////////////////////////////////////// */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 /*
  * fetch_or do atomic rmw:
- *  \ reads current value
- *  \ writes (old_value | new_value)
- *  \ returns old_value
+ *  > reads current value (old_value)
+ *  > writes (old_value | new_value)
+ *  > returns old_value
  */
 
 /* if old_value == States::PRODUCER => automata switches to States::TRYST

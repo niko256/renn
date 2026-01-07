@@ -7,11 +7,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 INCLUDE(GoogleTest)
 
 
-SET(HASH_SOURCES
-    ${smhasher_SOURCE_DIR}/src/City.cpp
-    ${smhasher_SOURCE_DIR}/src/MurmurHash3.cpp
-)
-
 
 ADD_EXECUTABLE(SpinlockTests SpinlockTests.cc)
 TARGET_LINK_LIBRARIES(SpinlockTests PRIVATE

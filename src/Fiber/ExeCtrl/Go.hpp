@@ -5,7 +5,7 @@
 
 namespace renn {
 
-void go(renn::sched::IScheduler&, renn::Renn&&);
+void go(renn::sched::IExecutor&, renn::Renn&&);
 
 void go(renn::Renn&&);
 

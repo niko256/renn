@@ -2,7 +2,7 @@
 
 namespace renn {
 
-void go(renn::sched::IScheduler& sched, renn::Renn&& proc) {
+void go(renn::sched::IExecutor& sched, renn::Renn&& proc) {
     auto newbie = new renn::Fiber(sched, std::move(proc));
     newbie->schedule();
 }

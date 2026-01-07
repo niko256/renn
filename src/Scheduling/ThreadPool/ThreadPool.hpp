@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Utils/Renn.hpp"
-#include "../IScheduler.hpp"
+#include "../IExecutor.hpp"
 #include "Queue.hpp"
 #include <atomic>
 #include <cassert>
@@ -17,7 +17,7 @@ namespace renn {
 // it doesn't accept and return any arguments
 // MOVABLE
 
-class ThreadPool : public sched::IScheduler {
+class ThreadPool : public sched::IExecutor {
   public:
     explicit ThreadPool(size_t num_threads);
 

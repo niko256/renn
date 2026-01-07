@@ -2,15 +2,15 @@
 
 A tiny experimental async runtime for learning and playing with concurrency.
 
-> Warning : this project exists purely for education and experimentation. Do not use it in production. Ever.
+> Warning : this project exists purely for education and experimentation.
 
 ---
 
 ## What is this?
 
-'renn' is my personal sandbox for understanding how async runtimes work inside, experimenting with different scheduling ideas and so on..
+'renn' is my personal sandbox for understanding how async runtimes work inside, experimenting with different concurrency models and so on..
 
-It's intentionally minimal, a bit weird in places, and constantly changing. The goal is to learn. It's closer to notebook made of code.
+It's intentionally minimal, a bit weird in places, and constantly changing. The goal is to learn and try different approaches.
 
 ---
 
@@ -19,7 +19,7 @@ It's intentionally minimal, a bit weird in places, and constantly changing. The 
 At the moment the runtime exposes a few classic building blocks:
 
 - Fibers - lightweith units of execution
-- Futures - values that will (maybe) be available later
+- Functional Futures - values that will (maybe) be available later
 - Scheduling - T.O.D.O...
 
 ---
@@ -30,9 +30,9 @@ While working on this, i got tired of saying "fiber/coroutine/task/job/whatever"
 
 I call it a **renn** (from the German verb **_rennen_** - "to run").
 
-So, the scheduler doesn't really care what higher-level abstraction you use - it just runs renns
+So, the scheduler doesn't really care what higher-level abstraction you use - it just submit renns.
 
-Maybe it is mildly confusing. But i don't care I just like building abstractions.
+Maybe it is mildly confusing. But i just like building abstractions.
 
 ---
 

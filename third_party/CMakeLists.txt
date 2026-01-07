@@ -7,12 +7,6 @@ FetchContent_Declare(
     GIT_TAG main
 )
 
-# SMHasher
-FetchContent_Declare(
-    smhasher
-    GIT_REPOSITORY https://github.com/aappleby/smhasher.git
-    GIT_TAG master
-)
 
 # sure ^-^
 FetchContent_Declare(
@@ -52,7 +46,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(
   googletest
-  smhasher
   sure
   sure-stack
   vvv
@@ -80,18 +73,12 @@ IF (vvv_POPULATED)
     ${vvv_SOURCE_DIR}/source)
 ENDIF()
 
-IF(smhasher_POPULATED)
-  ADD_LIBRARY(third_party_smhasher INTERFACE)
-  TARGET_INCLUDE_DIRECTORIES(third_party_smhasher INTERFACE
-      ${smhasher_SOURCE_DIR}/src)
-ENDIF()
-
 IF (function2_POPULATED)
   ADD_LIBRARY(third_party_function2 INTERFACE)
   TARGET_INCLUDE_DIRECTORIES(third_party_function2 INTERFACE
       ${function2_SOURCE_DIR}/include)
 ELSE()
-    message(STATUS "Function2 include: ${function2_SOURCE_DIR}/include")
+  message(STATUS "Function2 include: ${function2_SOURCE_DIR}/include")
 ENDIF()
 
 IF (futex_like_POPULATED)

@@ -2,7 +2,7 @@
 
 #include "../Coroutine/Coro.hpp"
 #include "../Coroutine/Routine.hpp"
-#include "../Scheduling/IScheduler.hpp"
+#include "../Scheduling/IExecutor.hpp"
 #include "Handle.hpp"
 #include "Syscalls.hpp"
 #include "function2/function2.hpp"
@@ -16,7 +16,7 @@ using SuspendHandler = fu2::unique_function<void(FiberHandle)>;
 
 class Fiber : public vvv::IntrusiveListNode<Fiber> {
   public:
-    explicit Fiber(sched::IScheduler&, Routine);
+    explicit Fiber(sched::IExecutor&, Routine);
 
     void schedule();
 
@@ -30,11 +30,11 @@ class Fiber : public vvv::IntrusiveListNode<Fiber> {
 
     Coroutine& get_coro();
 
-    [[nodiscard]] sched::IScheduler& current_scheduler() const;
+    [[nodiscard]] sched::IExecutor& current_scheduler() const;
 
   private:
     renn::Coroutine coro_;
-    sched::IScheduler& sched_;
+    sched::IExecutor& sched_;
     Syscall reason_;
     SuspendHandler handler_;
     static thread_local Fiber* current_;

@@ -42,7 +42,7 @@ class Promise {
     SharedState<T>* state_;
 };
 
-/* ///////////////////////////////////////////////////////////// */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 template <typename T>
 Promise<T>::Promise(SharedState<T>* s) : state_(s) {}
