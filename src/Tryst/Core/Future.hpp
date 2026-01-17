@@ -3,8 +3,6 @@
 #include "Callback.hpp"
 #include "SharedState.hpp"
 #include <../../Utils/Result.hpp>
-#include <concepts>
-#include <type_traits>
 #include <utility>
 
 namespace renn::tryst {

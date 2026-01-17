@@ -1,4 +1,5 @@
 #include "ThreadPool.hpp"
+#include <thread>
 
 namespace renn {
 
@@ -12,10 +13,7 @@ ThreadPool::~ThreadPool() {
 /// Starts the worker threads
 /// this method can be called only once
 void ThreadPool::start() {
-    // according to the condition start() and stop() are not called concurrenty
-    // and only one main thread is managing their execution => no mutexes needed
-    assert(!started_);
-    started_.store(true);
+    assert(!stopped_);
 
     workers_.reserve(num_threads_);
 
@@ -28,9 +26,9 @@ void ThreadPool::start() {
 
 /// submits renns for execution
 /// [condition] : it must be called after start() and before stop()
-void ThreadPool::submit(renn::Renn&& procedure) {
+void ThreadPool::submit(RennBase* procedure) {
     // just ensure here that user follows the pool's lifecycle 'contract'
-    assert(started_ && !stopped_);
+    assert(!stopped_);
 
     if (!procedure) {
         return;
@@ -44,7 +42,7 @@ void ThreadPool::submit(renn::Renn&& procedure) {
 /// ![must be called only once]!
 void ThreadPool::stop() {
     // another ensuring that user follow stop rules
-    assert(started_ && !stopped_);
+    assert(!stopped_);
 
     stopped_.store(true);
 
@@ -72,7 +70,7 @@ void ThreadPool::worker_loop() {
 
     while (true) {
         // pops blocks untill renn is available OR the queue is closed
-        std::optional<renn::Renn> renn = renns_.pop();
+        std::optional<renn::RennBase*> renn = renns_.pop();
 
         if (!renn) {
             // the worker's job is done
@@ -81,7 +79,7 @@ void ThreadPool::worker_loop() {
 
         try {
             // executing the renn
-            (*renn)();
+            renn.run();
         } catch (...) {
 
             // if a submitted renn throws an exception that is doesn't handle internally, we catch it here

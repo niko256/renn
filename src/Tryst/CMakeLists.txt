@@ -1,4 +1,4 @@
-# === Core : header-only ===
+# =*= Core : header-only =*=
 
 ADD_LIBRARY(TrystCore INTERFACE)
 
