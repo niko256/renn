@@ -3,11 +3,11 @@
 
 namespace renn::rt {
 
-Runtime::operator View() {
+RunLoop::operator View() {
     return {this, this};
 }
 
-void Runtime::submit(RennBase* renn) {
+void RunLoop::submit(RennBase* renn) {
     {
         std::lock_guard lock(mtx_);
         renns_.PushBack(renn);
@@ -15,7 +15,7 @@ void Runtime::submit(RennBase* renn) {
     condvar_.notify_one();
 }
 
-void Runtime::set(timers::Duration delay, timers::TimerBase* timer) {
+void RunLoop::set(timers::Duration delay, timers::TimerBase* timer) {
     {
         std::lock_guard lock(mtx_);
         timer->deadline = std::chrono::steady_clock::now() + delay;
@@ -24,7 +24,7 @@ void Runtime::set(timers::Duration delay, timers::TimerBase* timer) {
     condvar_.notify_one();
 }
 
-void Runtime::run() {
+void RunLoop::run() {
     while (true) {
         RennBase* renn = nullptr;
 
@@ -32,21 +32,17 @@ void Runtime::run() {
             std::unique_lock lock(mtx_);
 
             while (true) {
-                // 1. Move expired timers
                 timers_.move_expired_to(std::chrono::steady_clock::now(), renns_);
 
-                // 2. Check tasks
                 if (!renns_.IsEmpty()) {
                     renn = renns_.PopFront();
                     break;
                 }
 
-                // 3. Check stop
                 if (stop_requested_ && timers_.empty()) {
                     return;
                 }
 
-                // 4. Wait
                 auto next = timers_.next_deadline();
                 if (next) {
                     condvar_.wait_until(lock, *next);
@@ -68,7 +64,7 @@ void Runtime::run() {
     }
 }
 
-void Runtime::stop() {
+void RunLoop::stop() {
     {
         std::lock_guard lock(mtx_);
         stop_requested_ = true;

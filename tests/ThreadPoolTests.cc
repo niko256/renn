@@ -1,4 +1,5 @@
-#include "../src/Scheduling/ThreadPool/ThreadPool.hpp"
+#include "../src/Runtime/Core/Spawn.hpp"
+#include "../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
 #include "../src/Sync/WaitGroup/WaitGroup.hpp"
 #include <atomic>
 #include <future>
@@ -8,11 +9,11 @@
 #include <set>
 #include <thread>
 
+using namespace renn;
 
 using namespace std::chrono_literals;
 
-using WaitGroup = renn::sync::WaitGroup;
-using ThreadPool = renn::ThreadPool;
+using WaitGroup = sync::WaitGroup;
 
 TEST(WaitGroupTest, ConcurrentDone) {
     WaitGroup wg;
@@ -58,10 +59,10 @@ TEST(WaitGroupTest, BlocksUntilDone) {
 
 class ThreadPoolTests : public ::testing::Test {
   protected:
-    std::unique_ptr<ThreadPool> pool_;
+    std::unique_ptr<exe::ThreadPool> pool_;
 
     void SetUp() override {
-        pool_ = std::make_unique<ThreadPool>(4);
+        pool_ = std::make_unique<exe::ThreadPool>(4);
         pool_->start();
     }
 
@@ -74,7 +75,7 @@ TEST_F(ThreadPoolTests, ExecutesOneRenn) {
     std::promise<void> pr;
     auto future = pr.get_future();
 
-    pool_->submit([&] {
+    spawn(*pool_, [&] {
         pr.set_value();
     });
 
@@ -89,7 +90,7 @@ TEST_F(ThreadPoolTests, ExecuteManyRenns) {
 
     wg.add(renn_count);
     for (size_t i = 0; i < renn_count; ++i) {
-        pool_->submit([&] {
+        spawn(*pool_, [&] {
             renns_executed.fetch_add(1);
             wg.done();
         });
@@ -108,7 +109,7 @@ TEST_F(ThreadPoolTests, rennsOnDifferentThreads) {
 
     wg.add(renn_count);
     for (size_t i = 0; i < renn_count; ++i) {
-        pool_->submit([&] {
+        spawn(*pool_, [&] {
             volatile std::uint64_t acc = 0;
             for (int j = 0; j < 10'000; ++j) {
                 acc += static_cast<std::uint64_t>(j) * 17u;
@@ -130,28 +131,28 @@ TEST_F(ThreadPoolTests, rennsOnDifferentThreads) {
 }
 
 TEST_F(ThreadPoolTests, CurrentMethod) {
-    ASSERT_EQ(ThreadPool::current(), nullptr);
+    ASSERT_EQ(exe::ThreadPool::current(), nullptr);
 
-    std::promise<ThreadPool*> p;
+    std::promise<exe::ThreadPool*> p;
     auto f = p.get_future();
 
-    pool_->submit([&p, this] {
-        p.set_value(ThreadPool::current());
+    spawn(*pool_, [&p, this] {
+        p.set_value(exe::ThreadPool::current());
     });
 
-    ThreadPool* current_pool_ptr = f.get();
+    exe::ThreadPool* current_pool_ptr = f.get();
 
     ASSERT_EQ(current_pool_ptr, pool_.get());
 }
 
 TEST_F(ThreadPoolTests, ZeroThreadsPool) {
-    ThreadPool pool(0);  // !std::hardware_concurrency here!
+    exe::ThreadPool pool(0);  // !std::hardware_concurrency here!
     pool.start();
 
     std::promise<void> p;
     auto f = p.get_future();
 
-    pool.submit([&] {
+    spawn(*pool_, [&] {
         p.set_value();
     });
 

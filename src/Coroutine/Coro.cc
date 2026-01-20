@@ -4,8 +4,8 @@
 
 namespace renn {
 
-Coroutine::Coroutine(Routine func) : f_(std::move(func)),
-                                     stack_(Coroutine::allocate_stack()) {
+Coroutine::Coroutine(utils::Routine func) : f_(std::move(func)),
+                                            stack_(Coroutine::allocate_stack()) {
     callee_context_.Setup(stack_.MutView(), this);
 }
 

@@ -1,14 +1,15 @@
 #include "Go.hpp"
+#include "../Core/Fiber.hpp"
 
-namespace renn {
+namespace renn::fiber {
 
-void go(renn::sched::IExecutor& sched, renn::Renn&& proc) {
-    auto newbie = new renn::Fiber(sched, std::move(proc));
+void go(rt::IExecutor& sched, utils::Routine proc) {
+    auto newbie = new Fiber(sched, std::move(proc));
     newbie->schedule();
 }
 
-void go(renn::Renn&& proc) {
-    go(renn::Fiber::current()->current_scheduler(), std::move(proc));
+void go(utils::Routine proc) {
+    go(Fiber::current()->current_scheduler(), std::move(proc));
 }
 
-};  // namespace renn
+}  // namespace renn::fiber

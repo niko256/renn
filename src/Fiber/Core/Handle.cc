@@ -1,18 +1,17 @@
 #include "Handle.hpp"
 #include "Fiber.hpp"
-#include <algorithm>
 #include <cassert>
 #include <utility>
 
 namespace renn {
 
-FiberHandle::FiberHandle(Fiber* f) : fiber_(f) {}
+FiberHandle::FiberHandle(fiber::Fiber* f) : fiber_(f) {}
 
 bool FiberHandle::is_valid() const {
     return fiber_ != nullptr;
 }
 
-Fiber* FiberHandle::release() {
+fiber::Fiber* FiberHandle::release() {
     assert(is_valid());
     return std::exchange(fiber_, nullptr);
 }

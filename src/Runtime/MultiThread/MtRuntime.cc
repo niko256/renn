@@ -1,6 +1,6 @@
 #include "MtRuntime.hpp"
 
-namespace renn::multi_thread {
+namespace renn::rt {
 
 Runtime::Runtime(size_t num_workers)
     : thread_pool_(num_workers) {
@@ -43,4 +43,4 @@ bool Runtime::here() const {
     return ThreadPool::current() == &thread_pool_;
 }
 
-} /* namespace renn::multi_thread */
+}  // namespace renn::rt

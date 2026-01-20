@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Runtime/State.hpp"
+#include "../../Runtime/Core/View.hpp"
 
 namespace renn::future {
 
 template <typename C>
 concept Computation = requires(C comp, rt::View rt) {
-    comp.start(rt);
+    { comp.start(rt) };
 };
 
 };  // namespace renn::future

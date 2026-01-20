@@ -1,12 +1,17 @@
 #pragma once
 
-namespace renn {
+namespace renn::fiber {
 
+/* forward-declaration */
 class Fiber;
+
+}  // namespace renn::fiber
+
+namespace renn {
 
 class FiberHandle {
   public:
-    explicit FiberHandle(Fiber* fiber);
+    explicit FiberHandle(fiber::Fiber* fiber);
 
     FiberHandle() = default;
 
@@ -22,12 +27,12 @@ class FiberHandle {
 
     bool is_valid() const;
 
-    Fiber* release();
+    fiber::Fiber* release();
 
     void schedule();
 
   private:
-    renn::Fiber* fiber_ = nullptr;
+    fiber::Fiber* fiber_ = nullptr;
 };
 
 };  // namespace renn

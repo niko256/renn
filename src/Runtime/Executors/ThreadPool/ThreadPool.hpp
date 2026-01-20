@@ -1,17 +1,17 @@
 #pragma once
 
-#include "../../Runtime/Renn.hpp"
-#include "../IExecutor.hpp"
-#include "Queue.hpp"
+#include "../../Core/IExecutor.hpp"
+#include "../../Core/Renn.hpp"
+#include "IntrusiveQueue.hpp"
 #include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <thread>
 #include <vector>
 
-namespace renn {
+namespace renn::exe {
 
-class ThreadPool : public sched::IExecutor {
+class ThreadPool : public rt::IExecutor {
   public:
     explicit ThreadPool(size_t num_threads);
 
@@ -43,4 +43,4 @@ class ThreadPool : public sched::IExecutor {
     inline static thread_local ThreadPool* current_pool_ = nullptr;
 };
 
-};  // namespace renn
+};  // namespace renn::exe

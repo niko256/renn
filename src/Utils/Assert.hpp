@@ -6,31 +6,29 @@
 #include <source_location>
 #include <string_view>
 
-namespace renn {
+namespace renn::utils {
 
 [[noreturn]]
 inline void ASSERT_IMPL(bool condition,
                         std::string_view message = "ASSERTION FAILED",
                         std::source_location loc = std::source_location::current()) {
-    if (!condition) {
 
-        std::cerr << "ASSERT FAILED :   " << message << std::endl
-                  << " -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl
-                  << " | FILE | :   " << loc.file_name() << std::endl
-                  << " | LINE | :   " << loc.line() << std::endl
-                  << " | FUNC | :   " << loc.function_name() << std::endl
-                  << " -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::flush;
+    std::cerr << "ASSERT FAILED :   " << message << std::endl
+              << " -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- " << std::endl
+              << " | FILE | :   " << loc.file_name() << std::endl
+              << " | LINE | :   " << loc.line() << std::endl
+              << " | FUNC | :   " << loc.function_name() << std::endl
+              << " -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- " << std::flush;
 
-        std::abort();
-    }
+    std::abort();
 }
 
-#define RENN_ASSERT(condition, ...)                               \
-    do {                                                          \
-        if (!(condition)) {                                       \
-            ::renn::ASSERT_IMPL(false, __VA_ARGS__,               \
-                                std::source_location::current()); \
-        }                                                         \
-    } while (0)
+}  // namespace renn::utils
 
-};  // namespace renn
+#define RENN_ASSERT(condition, ...)                                      \
+    do {                                                                 \
+        if (!(condition)) {                                              \
+            ::renn::utils::ASSERT_IMPL(false, __VA_ARGS__,               \
+                                       std::source_location::current()); \
+        }                                                                \
+    } while (0)

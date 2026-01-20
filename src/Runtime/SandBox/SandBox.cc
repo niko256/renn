@@ -1,4 +1,4 @@
-#include "Sandbox.hpp"
+#include "SandBox.hpp"
 #include <cstddef>
 
 namespace renn::rt {
@@ -8,7 +8,7 @@ void SandBox::submit(RennBase* task) {
 }
 
 void SandBox::set(timers::Duration delay, timers::TimerBase* timer) {
-    timer::Instant deadline = clock_.now() + delay;
+    timers::Instant deadline = clock_.now() + delay;
     timers_.add(deadline, timer);
 }
 
@@ -39,7 +39,7 @@ size_t SandBox::run_tasks() {
 size_t SandBox::fire_ready_timers() {
     auto ready = timers_.extract_ready(clock_.now());
 
-    for (timer::TimerBase* timer : ready) {
+    for (timers::TimerBase* timer : ready) {
         tasks_.PushBack(timer);
     }
 
@@ -77,7 +77,7 @@ size_t SandBox::run_to_completion() {
 }
 
 size_t SandBox::run_for(timers::Duration duration) {
-    timer::Instant end_time = clock_.now() + duration;
+    timers::Instant end_time = clock_.now() + duration;
     size_t total = 0;
 
     while (true) {

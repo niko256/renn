@@ -2,7 +2,7 @@
 
 namespace renn::rt {
 
-void SandBoxTimerQueue::add(Instant deadline, TimerBase* timer) {
+void SandBoxTimerQueue::add(timers::Instant deadline, timers::TimerBase* timer) {
     timers_.emplace(deadline, timer);
 }
 
@@ -14,15 +14,15 @@ size_t SandBoxTimerQueue::size() const {
     return timers_.size();
 }
 
-std::optional<Instant> SandBoxTimerQueue::next_deadline() const {
+std::optional<timers::Instant> SandBoxTimerQueue::next_deadline() const {
     if (is_empty()) {
         return std::nullopt;
     }
     return timers_.begin()->first;
 }
 
-std::vector<TimerBase*> SandBoxTimerQueue::extract_ready(Instant now) {
-    std::vector<timer::TimerBase*> ready_tmrs;
+std::vector<timers::TimerBase*> SandBoxTimerQueue::extract_ready(timers::Instant now) {
+    std::vector<timers::TimerBase*> ready_tmrs;
 
     while (!is_empty()) {
         auto it = timers_.begin();

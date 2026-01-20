@@ -21,7 +21,7 @@ TARGET_LINK_LIBRARIES(ThreadPoolTests PRIVATE
   ThreadPool
   WaitGroup
   gtest_main
-  Scheduling
+  RtExe
 )
 gtest_discover_tests(ThreadPoolTests)
 
@@ -42,4 +42,16 @@ TARGET_LINK_LIBRARIES(FiberTests PRIVATE
   third_party_futex_like
   # fmt::fmt
 )
+
 gtest_discover_tests(FiberTests)
+
+
+ADD_EXECUTABLE(LazyFutureTests LazyFutureTests.cc)
+TARGET_LINK_LIBRARIES(LazyFutureTests PRIVATE
+  # Fiber
+  LazyFuture
+  ThreadPool
+  gtest_main
+)
+
+gtest_discover_tests(LazyFutureTests)

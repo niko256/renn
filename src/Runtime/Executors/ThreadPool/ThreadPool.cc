@@ -1,7 +1,7 @@
 #include "ThreadPool.hpp"
 #include <thread>
 
-namespace renn {
+namespace renn::exe {
 
 ThreadPool::ThreadPool(size_t num_threads) : num_threads_(num_threads > 0 ? num_threads : std::thread::hardware_concurrency()) {}
 
@@ -70,7 +70,7 @@ void ThreadPool::worker_loop() {
 
     while (true) {
         // pops blocks untill renn is available OR the queue is closed
-        std::optional<renn::RennBase*> renn = renns_.pop();
+        RennBase* renn = renns_.pop();
 
         if (!renn) {
             // the worker's job is done
@@ -79,7 +79,7 @@ void ThreadPool::worker_loop() {
 
         try {
             // executing the renn
-            renn.run();
+            renn->run();
         } catch (...) {
 
             // if a submitted renn throws an exception that is doesn't handle internally, we catch it here
@@ -93,4 +93,4 @@ void ThreadPool::worker_loop() {
         }
     }
 }
-};  // namespace renn
+};  // namespace renn::exe

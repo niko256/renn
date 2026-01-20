@@ -1,17 +1,15 @@
 #pragma once
 
-#include "../Runtime/Core/IExecutor.hpp"
-#include "../Runtime/Timerrrs/Clock.hpp"
-#include "../Runtime/Timerrrs/TSheduler.hpp"
-#include "../Runtime/Timerrrs/TimerQueue.hpp"
-#include "Clock.hpp"
+#include "../Core/IExecutor.hpp"
+#include "../Timerrrs/Clock.hpp"
+#include "../Timerrrs/TScheduler.hpp"
 #include "TimerQueue.hpp"
 #include <cstddef>
 #include <vvv/list.hpp>
 
 namespace renn::rt {
 
-class SandBox : public IExecutor, public rt::timers::TScheduler {
+class SandBox : public IExecutor, public timers::TScheduler {
   public:
     SandBox() = default;
 

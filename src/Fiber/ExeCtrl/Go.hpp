@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Utils/Renn.hpp"
-#include "Fiber.hpp"
+#include "../../Runtime/Core/IExecutor.hpp"
+#include "../../Utils/Routine.hpp"
 
-namespace renn {
+namespace renn::fiber {
 
-void go(renn::sched::IExecutor&, renn::Renn&&);
+void go(rt::IExecutor&, utils::Routine);
 
-void go(renn::Renn&&);
+void go(utils::Routine);
 
-};  // namespace renn
+};  // namespace renn::fiber

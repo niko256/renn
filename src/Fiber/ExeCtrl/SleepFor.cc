@@ -1,18 +1,32 @@
 #include "SleepFor.hpp"
-#include "Fiber.hpp"
-#include "Handle.hpp"
-#include "Syscalls.hpp"
+#include "../../Utils/Assert.hpp"
+#include "../Core/Fiber.hpp"
+#include "../Core/Handle.hpp"
 
 namespace renn::fiber {
 
-// void sleep_for(Duration delay) {
-//     Fiber::current()->suspend(SleepForTag{delay}, [delay](FiberHandle h) {
-//         auto& timer_sched = renn::timers(h.get_view());
-//         timer_sched.set(delay, [h] mutable {
-//             h.schedule();
-//         });
-//     });
-// }
+void SleepAwaiter::on_suspend(FiberHandle h) {
+    /*
+     * .
+     * ..
+     * ...
+     */
+}
+
+void SleepAwaiter::run() noexcept {
+    /* Es ist Zeit... */
+    f.schedule();
+}
+
+void sleep_for(timers::Duration delay) {
+    Fiber* f_curr = Fiber::current();
+
+    RENN_ASSERT(f_curr != nullptr, "Current fiber is invalid...");
+
+    SleepAwaiter slaw;
+
+    f_curr->suspend(&slaw);
+}
 
 
 };  // namespace renn::fiber

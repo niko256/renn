@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Timerrrs/TSheduler.hpp"
+#include "../Timerrrs/TScheduler.hpp"
 #include "IExecutor.hpp"
 #include "Renn.hpp"
 #include <tuple>
@@ -42,4 +42,4 @@ inline bool has_timers(const View& v) {
 }
 
 
-};  // namespace renn::rt
+}  // namespace renn::rt

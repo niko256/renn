@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Runtime/Core/State.hpp"
-#include "../Runtime/Core/View.hpp"
-#include "../Timerrrs/TSheduler.hpp"
+#include "../Core/State.hpp"
+#include "../Core/View.hpp"
+#include "../Timerrrs/TScheduler.hpp"
 #include "../Timerrrs/Time.hpp"
 #include "../Timerrrs/TimerQueue.hpp"
 #include <chrono>
@@ -12,17 +12,16 @@
 
 namespace renn::rt {
 
-class Runtime : public IExecutor, public timers::TScheduler {
+class RunLoop : public IExecutor, public timers::TScheduler {
   public:
     using Clock = std::chrono::steady_clock;
 
-    Runtime() = default;
+    RunLoop() = default;
 
-    // Non-copyable, non-movable
-    Runtime(const Runtime&) = delete;
-    Runtime& operator=(const Runtime&) = delete;
-    Runtime(Runtime&&) = delete;
-    Runtime& operator=(Runtime&&) = delete;
+    RunLoop(const RunLoop&) = delete;
+    RunLoop& operator=(const RunLoop&) = delete;
+    RunLoop(RunLoop&&) = delete;
+    RunLoop& operator=(RunLoop&&) = delete;
 
     operator View();
 
@@ -46,4 +45,4 @@ class Runtime : public IExecutor, public timers::TScheduler {
     bool stop_requested_{false};
 };
 
-};  // namespace renn::rt
+}  // namespace renn::rt
