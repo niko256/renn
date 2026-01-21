@@ -30,7 +30,7 @@ void Runtime::stop() {
 }
 
 Runtime::operator View() {
-    timer::IScheduler* ts = nullptr;
+    timers::TScheduler* ts = nullptr;
 
     if (timer_thread_.has_value()) {
         ts = &(*timer_thread_);
@@ -40,7 +40,7 @@ Runtime::operator View() {
 }
 
 bool Runtime::here() const {
-    return ThreadPool::current() == &thread_pool_;
+    return exe::ThreadPool::current() == &thread_pool_;
 }
 
 }  // namespace renn::rt

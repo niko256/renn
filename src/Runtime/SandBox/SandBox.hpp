@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../Core/IExecutor.hpp"
-#include "../Timerrrs/Clock.hpp"
+#include "../Core/View.hpp"
 #include "../Timerrrs/TScheduler.hpp"
+#include "../Timerrrs/VClock.hpp"
 #include "TimerQueue.hpp"
 #include <cstddef>
 #include <vvv/list.hpp>
@@ -18,7 +19,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
     SandBox& operator=(const SandBox&) = delete;
 
     /* =*= View =*= */
-    operator view();
+    operator View();
 
     void submit(RennBase* task) override;
 
@@ -29,6 +30,8 @@ class SandBox : public IExecutor, public timers::TScheduler {
     bool run_next_task();
 
     size_t run_tasks();
+
+    size_t fire_ready_timers();
 
     size_t advance_clock_by(timers::Duration delta);
 
@@ -51,10 +54,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
     timers::Instant current_time() const;
 
   private:
-    size_t fire_ready_timers();
-
-  private:
-    timers::Clock clock_;
+    timers::VClock clock_;
     vvv::IntrusiveList<RennBase> tasks_;
     SandBoxTimerQueue timers_;
 };

@@ -1,11 +1,9 @@
 #pragma once
 
-#include "../Core/State.hpp"
 #include "../Core/View.hpp"
 #include "../Timerrrs/TScheduler.hpp"
 #include "../Timerrrs/Time.hpp"
 #include "../Timerrrs/TimerQueue.hpp"
-#include <chrono>
 #include <condition_variable>
 #include <mutex>
 #include <vvv/list.hpp>
@@ -14,8 +12,6 @@ namespace renn::rt {
 
 class RunLoop : public IExecutor, public timers::TScheduler {
   public:
-    using Clock = std::chrono::steady_clock;
-
     RunLoop() = default;
 
     RunLoop(const RunLoop&) = delete;

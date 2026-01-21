@@ -1,0 +1,13 @@
+ADD_LIBRARY(RtRunLoop STATIC
+  RunLoop.cc
+)
+
+TARGET_INCLUDE_DIRECTORIES(RtRunLoop PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../..
+)
+
+TARGET_LINK_LIBRARIES(RtRunLoop PUBLIC
+  RtCore
+  RtTimers
+  third_party_vvv
+)

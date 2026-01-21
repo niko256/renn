@@ -8,4 +8,5 @@ target_include_directories(RtTimers PUBLIC
 
 target_link_libraries(RtTimers PUBLIC
     RtCore
+    third_party_vvv
 )

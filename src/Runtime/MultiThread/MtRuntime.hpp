@@ -2,6 +2,7 @@
 
 #include "../Core/IExecutor.hpp"
 #include "../Core/View.hpp"
+#include "ThreadPool/ThreadPool.hpp"
 #include "TimerThread.hpp"
 #include <cstddef>
 #include <optional>
@@ -25,7 +26,7 @@ class Runtime {
     bool here() const;
 
   private:
-    IExecutor& thread_pool_;
+    exe::ThreadPool thread_pool_;
     std::optional<timers::TimerThread> timer_thread_;
 };
 

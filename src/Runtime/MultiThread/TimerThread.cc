@@ -1,5 +1,4 @@
 #include "TimerThread.hpp"
-#include <vector>
 
 namespace renn::timers {
 
@@ -8,8 +7,12 @@ TimerThread::TimerThread(rt::IExecutor* executor)
 }
 
 void TimerThread::set(Duration delay, TimerBase* timer) {
-    Timepoint deadline = Clock::now() + delay;
-    timers_.push(deadline, timer);
+    {
+        std::lock_guard lock(mtx_);
+        timer->deadline = SystemClock::now() + delay;
+        timers_.add(timer);
+    }
+    cv_.notify_one();
 }
 
 void TimerThread::start() {
@@ -19,7 +22,11 @@ void TimerThread::start() {
 }
 
 void TimerThread::stop() {
-    timers_.close();
+    {
+        std::lock_guard lock(mtx_);
+        stopped_ = true;
+    }
+    cv_.notify_all();
 
     if (thread_.joinable()) {
         thread_.join();
@@ -27,20 +34,9 @@ void TimerThread::stop() {
 }
 
 void TimerThread::run_loop() {
-    std::vector<timer::TimerBase*> ready;
-    ready.reserve(32);
-
-    while (true) {
-        ready.clear();
-
-        if (!timers_.pop_ready_blocking(ready)) {
-            break;
-        }
-
-        for (timer::TimerBase* timer : ready) {
-            executor_->submit(timer);
-        }
-    }
+    /*
+     *
+     */
 }
 
 }  // namespace renn::timers

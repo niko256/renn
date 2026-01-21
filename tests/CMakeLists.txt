@@ -6,8 +6,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 INCLUDE(GoogleTest)
 
-
-
 ADD_EXECUTABLE(SpinlockTests SpinlockTests.cc)
 TARGET_LINK_LIBRARIES(SpinlockTests PRIVATE
   Spinlock

@@ -7,4 +7,5 @@ TARGET_INCLUDE_DIRECTORIES(RtCore INTERFACE
 TARGET_LINK_LIBRARIES(RtCore INTERFACE
   third_party_vvv
   Utils
+  third_party_function2
 )

@@ -10,4 +10,5 @@ TARGET_INCLUDE_DIRECTORIES(RtSandBox PUBLIC
 TARGET_LINK_LIBRARIES(RtSandBox PUBLIC
   RtCore
   RtTimers
+  third_party_vvv
 )

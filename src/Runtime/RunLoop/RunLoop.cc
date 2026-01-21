@@ -35,7 +35,7 @@ void RunLoop::run() {
                 timers_.move_expired_to(std::chrono::steady_clock::now(), renns_);
 
                 if (!renns_.IsEmpty()) {
-                    renn = renns_.PopFront();
+                    renn = renns_.TryPopFront();
                     break;
                 }
 

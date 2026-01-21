@@ -1,7 +1,10 @@
 #include "SandBox.hpp"
-#include <cstddef>
 
 namespace renn::rt {
+
+SandBox::operator View() {
+    return {this, this};
+}
 
 void SandBox::submit(RennBase* task) {
     tasks_.PushBack(task);
@@ -16,9 +19,11 @@ size_t SandBox::run_at_most_tasks(size_t limit) {
     size_t executed = 0;
 
     while (executed < limit && !tasks_.IsEmpty()) {
-        RennBase* task = tasks_.PopFront();
-        task->run();
-        ++executed;
+        RennBase* task = tasks_.TryPopFront();
+        if (task) {
+            task->run();
+            ++executed;
+        }
     }
 
     return executed;
@@ -28,9 +33,11 @@ size_t SandBox::run_tasks() {
     size_t executed = 0;
 
     while (!tasks_.IsEmpty()) {
-        RennBase* task = tasks_.PopFront();
-        task->run();
-        ++executed;
+        RennBase* task = tasks_.TryPopFront();
+        if (task) {
+            task->run();
+            ++executed;
+        }
     }
 
     return executed;
@@ -51,7 +58,7 @@ size_t SandBox::advance_clock_by(timers::Duration delta) {
     return fire_ready_timers();
 }
 
-size_t SandBox::advance_clock_to_next_deadline() {
+size_t SandBox::advance_clock_to_next_dd() {
     auto next = timers_.next_deadline();
 
     if (!next.has_value()) {
@@ -69,7 +76,7 @@ size_t SandBox::run_to_completion() {
         total += run_tasks();
 
         if (!has_tasks() && has_timers()) {
-            advance_clock_to_next_deadline();
+            advance_clock_to_next_dd();
         }
     }
 

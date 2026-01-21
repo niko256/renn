@@ -8,9 +8,9 @@ namespace renn::timers {
 /**
  * @brief Virtual clock..
  */
-class Clock {
+class VClock {
   public:
-    Clock() = default;
+    VClock() = default;
 
     void advance_by(Duration delta);
 
@@ -24,16 +24,16 @@ class Clock {
 
 /* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
-void Clock::advance_to(Instant point) {
+void VClock::advance_to(Instant point) {
     assert(point >= now_ && "...cannot go back in time...");
     now_ = point;
 }
 
-Instant Clock::now() const {
+Instant VClock::now() const {
     return now_;
 }
 
-void Clock::advance_by(Duration delta) {
+void VClock::advance_by(Duration delta) {
     assert(delta.count() >= 0 && "...cannot go back in time...");
     now_ += delta;
 }

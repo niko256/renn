@@ -8,7 +8,7 @@ namespace renn::timers {
 using Duration = std::chrono::milliseconds;
 
 /* System general clock */
-using Clock = std::chrono::steady_clock;
+using SystemClock = std::chrono::steady_clock;
 
 using Timepoint = std::chrono::steady_clock::time_point;
 

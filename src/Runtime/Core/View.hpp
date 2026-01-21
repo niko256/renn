@@ -41,5 +41,4 @@ inline bool has_timers(const View& v) {
     return std::get<1>(v) != nullptr;
 }
 
-
 }  // namespace renn::rt

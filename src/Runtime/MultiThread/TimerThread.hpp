@@ -3,6 +3,9 @@
 #include "../Core/IExecutor.hpp"
 #include "../Timerrrs/TScheduler.hpp"
 #include "../Timerrrs/TimerQueue.hpp"
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <thread>
 
 namespace renn::timers {
@@ -11,7 +14,6 @@ class TimerThread : public TScheduler {
   public:
     explicit TimerThread(rt::IExecutor* executor);
 
-    /* timer::IScheduler */
     void set(Duration delay, TimerBase* timer) override;
 
     void start();
@@ -22,8 +24,12 @@ class TimerThread : public TScheduler {
 
   private:
     rt::IExecutor* executor_;
-    timers::TimerBlockingQueue timers_;
+    IntrusiveTimerQueue timers_;
     std::thread thread_;
+
+    std::mutex mtx_;
+    std::condition_variable cv_;
+    std::atomic<bool> stopped_{false};
 };
 
 }  // namespace renn::timers
