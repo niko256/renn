@@ -3,49 +3,51 @@
 #include "../../Runtime/Core/View.hpp"
 #include "../Core/Continuation.hpp"
 #include "../Core/Thunk.hpp"
-#include "../Trait/Linear.hpp"
 #include "../Trait/ValueOf.hpp"
 
 namespace renn::future::thunk {
 
-template <Thunk Prod>
-class [[nodiscard]] Via : support::AlmostLinear<Via<Prod>> {
+template <Thunk Upstream>
+class [[nodiscard]] Via : ThunkBase<Via<Upstream>> {
   public:
-    using ValueType = trait::ValueOf<Prod>;
+    using ValueType = trait::ValueOf<Upstream>;
 
-    Via(Prod pr, rt::View runtime);
+    Via(Upstream pr, rt::View runtime);
 
-    template <Continuation<ValueType> Cons>
+    template <Continuation<ValueType> Downstream>
     struct MutateState {
         rt::View runtime_;
-        Cons consumer_;
+        Downstream consumer_;
 
         void proceed(ValueType v, rt::State st);
     };
 
-    template <Continuation<ValueType> Cons>
-    Computation auto materialize(Cons c);
+    template <Continuation<ValueType> Downstream>
+    Computation auto materialize(Downstream c);
 
   private:
-    Prod prod_;
+    Upstream upstream_;
     rt::View rt_;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-|
+ */
 
-template <Thunk Prod>
-Via<Prod>::Via(Prod pr, rt::View runtime) : prod_(std::move(pr)), rt_(runtime) {}
+template <Thunk Upstream>
+Via<Upstream>::Via(Upstream pr, rt::View runtime)
+    : upstream_(std::move(pr)),
+      rt_(runtime) {}
 
-template <Thunk Prod>
-template <Continuation<typename Via<Prod>::ValueType> Cons>
-Via<Prod>::MutateState<Cons>::proceed(ValueType v, rt::State st) {
+template <Thunk Upstream>
+template <Continuation<typename Via<Upstream>::ValueType> Downstream>
+Via<Upstream>::MutateState<Downstream>::proceed(ValueType v, rt::State st) {
     consumer_.proceed(std::move(v), rt::State{rt_});
 }
 
-template <Thunk Prod>
-template <Continuation<typename Via<Prod>::ValueType> Cons>
-Computation auto Via<Prod>::materialize(Cons c) {
-    return prod_.materialize(MutateState<Cons>{rt_, std::move(c)});
+template <Thunk Upstream>
+template <Continuation<typename Via<Upstream>::ValueType> Downstream>
+Computation auto Via<Prod>::materialize(Downstream c) {
+    return prod_.materialize(MutateState<Downstream>{rt_, std::move(c)});
 }
 
 }  // namespace renn::future::thunk

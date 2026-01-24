@@ -10,3 +10,9 @@ concept Continuation = requires(C cont, V v, rt::State st) {
 };
 
 }  // namespace renn::future
+
+namespace renn::future::role {
+
+struct ContinuationTag {};
+
+}  // namespace renn::future::role

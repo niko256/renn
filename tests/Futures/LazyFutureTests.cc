@@ -1,7 +1,6 @@
 #include <cmath>
 #include <gtest/gtest.h>
 
-#include "../../LazyFuture/Core/Pipe.hpp"
 #include "../../src/LazyFuture/FF/Get.hpp"
 #include "../../src/LazyFuture/FF/Map.hpp"
 #include "../../src/LazyFuture/FF/Ready.hpp"

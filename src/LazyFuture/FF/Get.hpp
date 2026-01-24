@@ -8,7 +8,7 @@ namespace renn::future {
 
 template <SomeFuture F>
 auto Get(F thunk) -> trait::ValueOf<F> {
-    thunk::Getter<F> getter{std::move(thunk)};
+    thunk::Receiver<F> getter{std::move(thunk)};
     return getter.get();
 }
 

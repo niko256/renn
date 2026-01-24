@@ -5,6 +5,6 @@
 namespace renn::future::trait {
 
 template <SomeFuture F>
-using ValueOf = F::ValueType;
+using ValueOf = typename F::ValueType;
 
 }

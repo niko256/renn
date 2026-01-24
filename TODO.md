@@ -1,0 +1,10 @@
+- Work-Stealing Thread Pool
+- Bunch of sync primitives : [RwLock, FairMutex, ..., AsyncEvent, AsyncWaitGroup]
+- Profiling and Benchmarking
+- Migrate from GTest to Twist framework
+- FutureAwaiter as a way to interwine futures and fibers
+- Refactore and improve the current timers infrastructure
+- Replace blocking queues wiith lock-free ones [where it is necessary]
+- Select! for fibers
+- Cancellation and Structured Concurrency
+- ...

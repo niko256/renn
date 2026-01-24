@@ -59,17 +59,12 @@ TEST_F(FiberTest, AfewSteps) {
     wg.wait();
 }
 
-TEST_F(FiberTest, ConcurrentFileIO) {
-}
+TEST_F(FiberTest, ConcurrentFileIO) {}
 
-TEST_F(FiberTest, ExceptionInFiber) {
-}
+TEST_F(FiberTest, ExceptionInFiber) {}
 
-TEST_F(FiberTest, TheHordeOfFibers) {
-}
+TEST_F(FiberTest, TheHordeOfFibers) {}
 
-TEST_F(FiberTest, Rescheduling1) {
-}
+TEST_F(FiberTest, Rescheduling1) {}
 
-TEST_F(FiberTest, Rescheduling2) {
-}
+TEST_F(FiberTest, Rescheduling2) {}

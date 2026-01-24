@@ -9,12 +9,12 @@ namespace renn::future {
 namespace pipe {
 
 template <typename F>
-struct [[nodiscard]] MapAdapter {
+struct [[nodiscard]] MapCombinator {
     F procedure_;
 
-    explicit MapAdapter(F user);
+    explicit MapCombinator(F user);
 
-    MapAdapter(const MapAdapter&) = delete;
+    MapCombinator(const MapCombinator&) = delete;
 
     template <SomeFuture Input>
     SomeFuture auto pipe(Input in);
@@ -23,11 +23,12 @@ struct [[nodiscard]] MapAdapter {
 /* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 template <typename F>
-MapAdapter<F>::MapAdapter(F user) : procedure_(std::move(user)) {}
+MapCombinator<F>::MapCombinator(F user)
+    : procedure_(std::move(user)) {}
 
 template <typename F>
 template <SomeFuture Input>
-SomeFuture auto MapAdapter<F>::pipe(Input in) {
+SomeFuture auto MapCombinator<F>::pipe(Input in) {
     return thunk::Map{std::move(in), std::move(procedure_)};
 }
 
@@ -35,7 +36,7 @@ SomeFuture auto MapAdapter<F>::pipe(Input in) {
 
 template <typename F>
 auto Map(F proc) {
-    return pipe::MapAdapter<F>{std::move(proc)};
+    return pipe::MapCombinator<F>{std::move(proc)};
 }
 
 }  // namespace renn::future

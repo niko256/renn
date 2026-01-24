@@ -2,7 +2,7 @@
 
 A tiny experimental async runtime for learning and playing with concurrency.
 
-> Warning : this project exists purely for education and experimentation.
+<!> Warning : this project exists purely for education and experimentation.
 
 ---
 
@@ -19,7 +19,8 @@ It's intentionally minimal, a bit weird in places, and constantly changing. The 
 At the moment the runtime exposes a few classic building blocks:
 
 - Fibers - lightweith units of execution
-- Functional Futures - values that will (maybe) be available later
+- Functional Lazy Futures - values that will (maybe) be available later
+- Timers infrastructure
 - Scheduling - T.O.D.O...
 
 ---

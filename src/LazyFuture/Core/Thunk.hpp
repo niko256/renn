@@ -3,12 +3,14 @@
 #include "../../Runtime/Core/State.hpp"
 #include "Computation.hpp"
 #include <utility>
+#include "Role.hpp"
 
 namespace renn::future::thunk {
 
 namespace detail {
 
-template <typename V> struct ContinuationArchetype {
+template <typename V>
+struct ContinuationArchetype : role::ContinuationTag {
     void proceed(V, rt::State){};
 };
 
@@ -22,10 +24,12 @@ concept Thunk = requires {
 
     {
         std::declval<T>().materialize(
-            std::declval<
-                detail::ContinuationArchetype<typename T::ValueType>>())
+            std::declval<detail::ContinuationArchetype<typename T::ValueType>>()
+        )
 
     } -> future::Computation;
 };
+
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 }  // namespace renn::future::thunk

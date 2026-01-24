@@ -8,12 +8,12 @@ namespace renn::future {
 
 namespace pipe {
 
-struct [[nodiscard]] Via {
+struct [[nodiscard]] ViaCombinator {
     rt::View runtime_;
 
-    explicit Via(rt::View rt);
+    explicit ViaCombinator(rt::View rt);
 
-    Via(const Via&) = delete;
+    ViaCombinator(const ViaCombinator&) = delete;
 
     template <SomeFuture Input>
     SomeFuture auto pipe(Input in);
@@ -21,17 +21,18 @@ struct [[nodiscard]] Via {
 
 /* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
-Via::Via(rt::View rt) : runtime_(rt) {}
+ViaCombinator::ViaCombinator(rt::View rt)
+    : runtime_(rt) {}
 
 template <SomeFuture Input>
-SomeFuture auto Via::pipe(Input in) {
+SomeFuture auto ViaCombinator::pipe(Input in) {
     return thunk::Via{std::move(in), runtime_};
 }
 
 }  // namespace pipe
 
 inline auto Via(rt::View runtime) {
-    return pipe::Via{runtime};
+    return pipe::ViaCombinator{runtime};
 }
 
 }  // namespace renn::future
