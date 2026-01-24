@@ -17,12 +17,14 @@ TARGET_LINK_LIBRARIES(TrystCore INTERFACE
   Utils
 )
 
-SET(TrystImpl
+SET(TrystImplSrc
   Impl/Contract.cc
   Impl/Get.cc
 )
 
-ADD_LIBRARY(TrystImpl STATIC)
+ADD_LIBRARY(TrystImpl STATIC
+  ${TrystImplSrc}
+)
 
 TARGET_LINK_LIBRARIES(TrystImpl PUBLIC
   Event

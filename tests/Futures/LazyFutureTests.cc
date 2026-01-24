@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "../src/LazyFuture/FF/Get.hpp"
-#include "../src/LazyFuture/FF/Ready.hpp"
+#include "../../src/LazyFuture/FF/Get.hpp"
+#include "../../src/LazyFuture/FF/Ready.hpp"
 
 using namespace renn;
 

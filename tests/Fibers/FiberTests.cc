@@ -1,8 +1,8 @@
-#include "../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
-#include "../src/Sync/WaitGroup/WaitGroup.hpp"
+#include "../../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
+#include "../../src/Sync/WaitGroup/WaitGroup.hpp"
 
-#include "../src/Fiber/Core/Fiber.hpp"
-#include "../src/Fiber/ExeCtrl/Go.hpp"
+#include "../../src/Fiber/Core/Fiber.hpp"
+#include "../../src/Fiber/ExeCtrl/Go.hpp"
 #include <arpa/inet.h>
 #include <format>
 #include <gtest/gtest.h>
@@ -72,9 +72,4 @@ TEST_F(FiberTest, Rescheduling1) {
 }
 
 TEST_F(FiberTest, Rescheduling2) {
-}
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

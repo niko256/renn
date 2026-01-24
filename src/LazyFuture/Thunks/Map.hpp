@@ -10,6 +10,9 @@
 
 namespace renn::future::thunk {
 
+/*
+ * | Future<T> -> (T -> U) -> Future<U> |
+ */
 template <Thunk Prod, typename F>
 struct [[nodiscard]] Map : support::AlmostLinear<Map<Prod, F>> {
     using InputType = trait::ValueOf<Prod>;

@@ -1,6 +1,6 @@
-#include "../src/Runtime/Core/Spawn.hpp"
-#include "../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
-#include "../src/Sync/WaitGroup/WaitGroup.hpp"
+#include "../../src/Runtime/Core/Spawn.hpp"
+#include "../../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
+#include "../../src/Sync/WaitGroup/WaitGroup.hpp"
 #include <atomic>
 #include <future>
 #include <gtest/gtest.h>

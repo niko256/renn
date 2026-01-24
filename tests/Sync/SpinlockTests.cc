@@ -1,4 +1,4 @@
-#include "../src/Sync/Spinlock/Spinlock.hpp"
+#include "../../src/Sync/Spinlock/Spinlock.hpp"
 #include "gtest/gtest.h"
 #include <atomic>
 #include <chrono>
@@ -262,9 +262,4 @@ TEST_F(SpinlockPerfTest, HighContention) {
 
     std::cout << "High contention workload completed in " << duration << " ms\n";
     EXPECT_EQ(counter.load(), num_threads * operations_per_thread);
-}
-
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
