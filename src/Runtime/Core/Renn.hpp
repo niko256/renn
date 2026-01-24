@@ -13,8 +13,6 @@ struct IRenn {
 
 struct RennBase : IRenn, vvv::IntrusiveListNode<RennBase> {
     RennBase() = default;
-    RennBase(const RennBase&) = delete;
-    RennBase& operator=(const RennBase&) = delete;
 };
 
 }  // namespace renn

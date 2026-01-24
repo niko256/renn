@@ -8,9 +8,8 @@ namespace renn::future::thunk {
 
 namespace detail {
 
-template <typename V>
-struct ContinuationArchetype {
-    void proceed(V, rt::State);
+template <typename V> struct ContinuationArchetype {
+    void proceed(V, rt::State){};
 };
 
 }  // namespace detail
@@ -22,8 +21,9 @@ concept Thunk = requires {
     typename T::ValueType;
 
     {
-        std::declval<T>()
-            .materialize(std::declval<detail::ContinuationArchetype<typename T::ValueType>>())
+        std::declval<T>().materialize(
+            std::declval<
+                detail::ContinuationArchetype<typename T::ValueType>>())
 
     } -> future::Computation;
 };
