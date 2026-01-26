@@ -1,0 +1,167 @@
+#include "../../src/Runtime/Core/Spawn.hpp"
+#include "../../src/Runtime/Executors/ThreadPool/ThreadPool.hpp"
+#include "../../src/Sync/WaitGroup/WaitGroup.hpp"
+#include <atomic>
+#include <future>
+#include <gtest/gtest.h>
+#include <memory>
+#include <mutex>
+#include <set>
+#include <thread>
+
+using namespace renn;
+
+using namespace std::chrono_literals;
+
+using WaitGroup = sync::WaitGroup;
+
+TEST(WaitGroupTest, ConcurrentDone) {
+    WaitGroup wg;
+    const size_t renn_count = 1000;
+    std::vector<std::thread> threads;
+    std::atomic<int> cnt;
+
+    wg.add(renn_count);
+
+    for (size_t i = 0; i < renn_count; ++i) {
+        threads.emplace_back([&] {
+            cnt.fetch_add(1);
+            wg.done();
+        });
+    }
+
+    wg.wait();
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    SUCCEED();
+}
+
+TEST(WaitGroupTest, BlocksUntilDone) {
+    WaitGroup wg;
+    std::atomic<bool> renn_done = false;
+
+    wg.add(1);
+
+    std::jthread renn_thread([&] {
+        std::this_thread::sleep_for(100ms);
+        renn_done.store(true);
+
+        wg.done();
+    });
+
+    wg.wait();
+
+    ASSERT_TRUE(renn_done);
+}
+
+class ThreadPoolTests : public ::testing::Test {
+  protected:
+    std::unique_ptr<exe::ThreadPool> pool_;
+
+    void SetUp() override {
+        pool_ = std::make_unique<exe::ThreadPool>(4);
+        pool_->start();
+    }
+
+    void TearDown() override {
+        pool_->stop();
+    }
+};
+
+TEST_F(ThreadPoolTests, ExecutesOneRenn) {
+    std::promise<void> pr;
+    auto future = pr.get_future();
+
+    spawn(*pool_, [&] {
+        pr.set_value();
+    });
+
+    auto status = future.wait_for(1s);
+    ASSERT_EQ(status, std::future_status::ready);
+}
+
+TEST_F(ThreadPoolTests, ExecuteManyRenns) {
+    const size_t renn_count = 10000;
+    WaitGroup wg;
+    std::atomic<size_t> renns_executed{0};
+
+    wg.add(renn_count);
+    for (size_t i = 0; i < renn_count; ++i) {
+        spawn(*pool_, [&] {
+            renns_executed.fetch_add(1);
+            wg.done();
+        });
+    }
+
+    wg.wait();
+
+    ASSERT_EQ(renns_executed.load(), renn_count);
+}
+
+TEST_F(ThreadPoolTests, rennsOnDifferentThreads) {
+    const size_t renn_count = 5000;
+    WaitGroup wg;
+    std::mutex threads_ids_mutex;
+    std::set<std::thread::id> threads_ids;
+
+    wg.add(renn_count);
+    for (size_t i = 0; i < renn_count; ++i) {
+        spawn(*pool_, [&] {
+            volatile std::uint64_t acc = 0;
+            for (int j = 0; j < 10'000; ++j) {
+                acc += static_cast<std::uint64_t>(j) * 17u;
+            }
+
+            {
+                std::lock_guard<std::mutex> lock(threads_ids_mutex);
+                threads_ids.insert(std::this_thread::get_id());
+            }
+
+            wg.done();
+        });
+    }
+
+    // ensure that all renns has been hinished
+    wg.wait();
+
+    ASSERT_GT(threads_ids.size(), 1u);
+}
+
+TEST_F(ThreadPoolTests, CurrentMethod) {
+    ASSERT_EQ(exe::ThreadPool::current(), nullptr);
+
+    std::promise<exe::ThreadPool*> p;
+    auto f = p.get_future();
+
+    spawn(*pool_, [&p, this] {
+        p.set_value(exe::ThreadPool::current());
+    });
+
+    exe::ThreadPool* current_pool_ptr = f.get();
+
+    ASSERT_EQ(current_pool_ptr, pool_.get());
+}
+
+TEST_F(ThreadPoolTests, ZeroThreadsPool) {
+    exe::ThreadPool pool(0);  // !std::hardware_concurrency here!
+    pool.start();
+
+    std::promise<void> p;
+    auto f = p.get_future();
+
+    spawn(*pool_, [&] {
+        p.set_value();
+    });
+
+    auto status = f.wait_for(1s);
+    ASSERT_EQ(status, std::future_status::ready);
+
+    pool.stop();
+}
+
+///[TODO]: Implement a Death test
+/// where we want to verify that submit() triggers an assert
+/// if it's called after stop() has been initiated but before it has completed

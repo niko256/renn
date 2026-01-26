@@ -1,35 +1,52 @@
 #include "Fiber.hpp"
+#include "../../Utils/Assert.hpp"
+#include "Awaiter.hpp"
 #include "Coro.hpp"
+#include "Handle.hpp"
+#include <cassert>
+#include <utility>
 
-namespace renn {
+namespace renn::fiber {
 
 thread_local Fiber* Fiber::current_ = nullptr;
 
-Fiber::Fiber(sched::IScheduler& sched, Routine routine)
-    : sched_(sched),
-      coro_(std::move(routine)) {}
+Fiber::Fiber(rt::IExecutor& sched, utils::Routine routine)
+    : coro_(std::move(routine)),
+      sched_(sched) {}
 
 void Fiber::schedule() {
-    sched_.submit([this] {
-        this->step();
-    });
+    sched_.submit(this);
+}
+
+void Fiber::run() noexcept {
+    step();
 }
 
 void Fiber::step() {
-    auto prev_fiber = current_;
+    Fiber* prev_fiber = current_;
     current_ = this;
 
     coro_.resume();
 
     current_ = prev_fiber;
 
+
     /* polling the completion */
-    if (!get_coro().is_done()) {
-        /* re-subscription (or rescheduling) */
-        this->schedule();
-    } else {
+    if (coro_.is_done()) {
+        /* std::cerr << "DEBUG: Fiber " << this << " Done." << std::endl; */
         delete this;
+        return;
     }
+
+    RENN_ASSERT(awaiter_ != nullptr, "Awaiter is nullptr");
+    IAwaiter* aw = std::exchange(awaiter_, nullptr);
+
+    aw->on_suspend(FiberHandle(this));
+}
+
+void Fiber::suspend(IAwaiter* awaiter) {
+    awaiter_ = awaiter;
+    coro_.suspend();
 }
 
 /* get current fiber */
@@ -47,7 +64,7 @@ Coroutine& Fiber::get_coro() {
 }
 
 /* get internal scheduler */
-sched::IScheduler& Fiber::current_scheduler() const {
+rt::IExecutor& Fiber::current_scheduler() const {
     return sched_;
 }
-};  // namespace renn
+};  // namespace renn::fiber

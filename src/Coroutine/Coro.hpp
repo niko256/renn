@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Routine.hpp"
+#include "../Utils/Routine.hpp"
 #include <sure/context.hpp>
 #include <sure/stack/mmap.hpp>
 #include <sure/trampoline.hpp>
@@ -24,7 +24,7 @@ namespace renn {
 class Coroutine : private sure::ITrampoline {
   public:
     /* Constructs coro with the given procedure */
-    explicit Coroutine(Routine);
+    explicit Coroutine(utils::Routine);
 
     void suspend();
 
@@ -60,7 +60,7 @@ class Coroutine : private sure::ITrampoline {
     bool is_done_ = false;
 
 
-    Routine f_;
+    utils::Routine f_;
 };  // namespace sure::ITrampoline
 
 };  // namespace renn
