@@ -29,7 +29,8 @@ inline void submit(const View& rt, RennBase* renn) {
     executor(rt).submit(renn);
 }
 
-inline void set_timer(const View& rt, timers::Duration delay, timers::TimerBase* timer) {
+inline void
+set_timer(const View& rt, timers::Duration delay, timers::TimerBase* timer) {
     timers(rt).set(delay, timer);
 }
 
@@ -39,6 +40,14 @@ inline bool has_executor(const View& v) {
 
 inline bool has_timers(const View& v) {
     return std::get<1>(v) != nullptr;
+}
+
+inline View make_view(IExecutor& exe) {
+    return View{&exe, nullptr};
+}
+
+inline View make_view(IExecutor& exe, timers::TScheduler& sched) {
+    return View{&exe, &sched};
 }
 
 }  // namespace renn::rt

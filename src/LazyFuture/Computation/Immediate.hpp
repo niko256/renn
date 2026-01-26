@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Core/Role.hpp"
-#include "../Core/Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../../Runtime/Core/View.hpp"
 #include "../../Runtime/Core/State.hpp"
 

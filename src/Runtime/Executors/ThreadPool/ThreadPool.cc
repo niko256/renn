@@ -3,7 +3,10 @@
 
 namespace renn::exe {
 
-ThreadPool::ThreadPool(size_t num_threads) : num_threads_(num_threads > 0 ? num_threads : std::thread::hardware_concurrency()) {}
+ThreadPool::ThreadPool(size_t num_threads)
+    : num_threads_(
+          num_threads > 0 ? num_threads : std::thread::hardware_concurrency()
+      ) {}
 
 /// [condition]: destructor must be called after close()
 ThreadPool::~ThreadPool() {
@@ -18,9 +21,7 @@ void ThreadPool::start() {
     workers_.reserve(num_threads_);
 
     for (size_t i = 0; i < num_threads_; ++i) {
-        workers_.emplace_back([this] {
-            worker_loop();
-        });
+        workers_.emplace_back([this] { worker_loop(); });
     }
 }
 
@@ -46,7 +47,8 @@ void ThreadPool::stop() {
 
     stopped_.store(true);
 
-    // closing the queue is th signal to worker threads to stop working for new renns and exit their loop
+    // closing the queue is th signal to worker threads to stop working for new
+    // renns and exit their loop
     renns_.close();
 
     // waits for all worker threads to complete their execution
@@ -64,7 +66,8 @@ ThreadPool* ThreadPool::current() {
 }
 
 /// Main loop for each worker-thread
-/// [every worker continuously pulls renns from the queue and exec them, 'till queue is empty and closed]
+/// [every worker continuously pulls renns from the queue and exec them, 'till
+/// queue is empty and closed]
 void ThreadPool::worker_loop() {
     current_pool_ = this;
 
@@ -81,13 +84,18 @@ void ThreadPool::worker_loop() {
             // executing the renn
             renn->run();
         } catch (...) {
-
-            // if a submitted renn throws an exception that is doesn't handle internally, we catch it here
+            // if a submitted renn throws an exception that is doesn't handle
+            // internally, we catch it here
             //
-            // !!! : A renn that allows an exception to escape is violating its contract
-            // !!! and has likely left application in a corrupted, unknowm state [broken invariants etc..]
-            // !!! The ThreadPool's responsibility is to execute renns, not to reason about their internal logic or error handling
-            // !!! Thus continuing execution would be unsafe => the only responsible action is to terminate entire program to prevent further damage
+            // !!! : A renn that allows an exception to escape is violating its
+            // contract
+            // !!! and has likely left application in a corrupted, unknowm state
+            // [broken invariants etc..]
+            // !!! The ThreadPool's responsibility is to execute renns, not to
+            // reason about their internal logic or error handling
+            // !!! Thus continuing execution would be unsafe => the only
+            // responsible action is to terminate entire program to prevent
+            // further damage
 
             std::terminate();
         }

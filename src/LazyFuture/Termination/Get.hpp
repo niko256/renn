@@ -7,7 +7,7 @@
 #include "../Trait/ComputationOf.hpp"
 #include <cassert>
 #include <optional>
-#include "../Cont/Demand.hpp"
+#include "../Continuation/Demand.hpp"
 
 namespace renn::future::thunk {
 

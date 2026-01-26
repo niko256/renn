@@ -4,10 +4,11 @@
 
 namespace renn::future {
 
-/*
- * Materialized computation that represents a Pinned object
+/**
+ * @PHILOSOPHY
+ * Computation is like a compiled assembly - the abstract plan (Thunk)
+ * has been compiled into concrete executable structure.
  */
-
 
 template <typename C>
 concept Computation = requires(C comp, rt::View rt) {

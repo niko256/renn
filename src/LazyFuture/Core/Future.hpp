@@ -5,7 +5,6 @@
 
 namespace renn::future {
 
-
 template <typename F>
 concept SomeFuture = thunk::Thunk<F>;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../Core/Thunk.hpp"
 #include "ValueOf.hpp"
 #include <utility>

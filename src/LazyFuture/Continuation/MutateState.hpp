@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Continuation.hpp"
+#include "Continuation.hpp"
 #include "../../Runtime/Core/View.hpp"
 #include "../../Runtime/Core/State.hpp"
 

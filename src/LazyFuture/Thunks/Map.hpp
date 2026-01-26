@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../../Runtime/Core/Renn.hpp"
-#include "../Core/Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
-#include "../Cont/Transform.hpp"
+#include "../Continuation/Transform.hpp"
 #include <algorithm>
 #include <optional>
 #include <type_traits>

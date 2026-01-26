@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../../Runtime/Core/State.hpp"
-#include "Computation.hpp"
+#include "../Computation/Computation.hpp"
 #include <utility>
 #include "Role.hpp"
-#include "Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 
 namespace renn::future::thunk {
 

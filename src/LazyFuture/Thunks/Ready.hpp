@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../../Runtime/Core/View.hpp"
-#include "../Core/Computation.hpp"
-#include "../Core/Continuation.hpp"
+#include "../Computation/Computation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../Core/Role.hpp"
-#include "../Comp/Immediate.hpp"
+#include "../Computation/Immediate.hpp"
 #include <algorithm>
 #include <utility>
 

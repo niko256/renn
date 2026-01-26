@@ -4,6 +4,10 @@
 #include "../../src/LazyFuture/FF/Get.hpp"
 #include "../../src/LazyFuture/FF/Map.hpp"
 #include "../../src/LazyFuture/FF/Ready.hpp"
+#include "../../src/LazyFuture/FF/Pure.hpp"
+#include "../../src/LazyFuture/FF/Via.hpp"
+#include "Core/View.hpp"
+#include "ThreadPool/ThreadPool.hpp"
 
 using namespace renn;
 
@@ -38,4 +42,18 @@ TEST_F(LFTest, MapChain) {
 
     int res = future::Get(std::move(f4));
     EXPECT_EQ(res, 14);  // ((1 + 1) * 2) + 10
+}
+
+TEST_F(LFTest, Just) {
+    exe::ThreadPool dumb_rt{4};
+    dumb_rt.start();
+
+    auto f = future::Pure() | future::Via(dumb_rt)
+             | future::Map([](future::Unit) { return 8; });
+
+    int res = future::Get(std::move(f));
+
+    EXPECT_EQ(res, 8);
+
+    dumb_rt.stop();
 }

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "../../Runtime/Core/View.hpp"
-#include "../Core/Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
-#include "../Cont/MutateState.hpp"
+#include "../Continuation/MutateState.hpp"
 
 namespace renn::future::thunk {
 
 template <Thunk Upstream>
-class [[nodiscard]] Via : role::ThunkBase<Via<Upstream>> {
+class [[nodiscard]] Via : public role::ThunkBase<Via<Upstream>> {
   public:
     using ValueType = trait::ValueOf<Upstream>;
 

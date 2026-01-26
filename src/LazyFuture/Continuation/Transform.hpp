@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Continuation.hpp"
+#include "../Continuation/Continuation.hpp"
 #include "../../Runtime/Core/Renn.hpp"
 #include "../../Runtime/Core/State.hpp"
 #include <algorithm>
