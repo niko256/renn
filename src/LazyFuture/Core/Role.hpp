@@ -7,11 +7,13 @@ namespace renn::future::role {
 template <typename Derived>
 struct ThunkBase {
     template <typename Combinator>
-    auto operator|(Combinator&& thunk) &&;
+    [[nodiscard]] auto operator|(Combinator&& comb) &&;
 
     ThunkBase() = default;
-    ThunkBase(ThunkBase&&) = default;
     ~ThunkBase() = default;
+
+    ThunkBase(ThunkBase&&) = default;
+    ThunkBase& operator=(ThunkBase&&) = default;
 
     /* Non-copyable */
     ThunkBase(const ThunkBase&) = delete;
@@ -22,9 +24,10 @@ struct ThunkBase {
 
 template <typename Derived>
 struct ComputationBase {
-    ComputationBase(ComputationBase&&) = delete;
+    ComputationBase(ComputationBase&&) = default;
+    ComputationBase& operator=(ComputationBase&&) = default;
+
     ComputationBase(const ComputationBase&) = delete;
-    ComputationBase& operator=(ComputationBase&&) = delete;
     ComputationBase& operator=(const ComputationBase&) = delete;
 
   protected:
@@ -36,7 +39,7 @@ struct ComputationBase {
 
 template <typename Derived>
 template <typename Combinator>
-auto ThunkBase<Derived>::operator|(Combinator comb) && {
+auto ThunkBase<Derived>::operator|(Combinator&& comb) && {
     return std::move(comb).pipe(static_cast<Derived&&>(*this));
 }
 

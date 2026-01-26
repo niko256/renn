@@ -7,6 +7,7 @@
 #include "../Trait/ComputationOf.hpp"
 #include <cassert>
 #include <optional>
+#include "../Cont/Demand.hpp"
 
 namespace renn::future::thunk {
 
@@ -27,38 +28,29 @@ class [[nodiscard]] Receiver : public RennBase {
     void set(ValueType v);
 
   private:
-    struct Demand {
-        Receiver* self_;
+    using MyDemand = cont::Demand<ValueType, Receiver>;
+    using Comp = trait::ComputationOf<T, MyDemand>;
 
-        void proceed(ValueType val, rt::State state);
-    };
-
-    using Comp = trait::ComputationOf<T, Demand>;
-
-    std::optional<Comp> comp_;
     T thunk_;
     rt::RunLoop looop_;
+    std::optional<Comp> comp_;
     std::optional<ValueType> result_;
     bool completed_{false};
 };
 
 /* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
-template <Thunk T>
-Receiver<T>::Receiver(T th)
-    : thunk_(std::move(th)),
+template <thunk::Thunk T>
+Receiver<T>::Receiver(T thunk)
+    : thunk_(std::move(thunk)),
       looop_(),
+      comp_(std::nullopt),
       result_(std::nullopt),
       completed_(false) {}
 
 template <Thunk T>
-void Receiver<T>::Demand::proceed(ValueType val, rt::State /* state */) {
-    self_->set(std::move(val));
-}
-
-template <Thunk T>
 void Receiver<T>::run() noexcept {
-    comp_.emplace(thunk_.materialize(Demand{this}));
+    comp_.emplace(std::move(thunk_).materialize(MyDemand{this}));
 
     comp_->start(looop_);
 }
@@ -67,6 +59,7 @@ template <Thunk T>
 void Receiver<T>::set(ValueType v) {
     result_.emplace(std::move(v));
     completed_ = true;
+
     looop_.stop();
 }
 
@@ -74,6 +67,7 @@ template <Thunk T>
 typename Receiver<T>::ValueType Receiver<T>::get() {
     rt::submit(looop_, this);
 
+    /* spinning looooop */
     looop_.run();
 
     assert(completed_);

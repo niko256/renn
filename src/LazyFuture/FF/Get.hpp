@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Core/Future.hpp"
-#include "../Thunks/Get.hpp"
+#include "../Terminators/Get.hpp"
 #include "../Trait/ValueOf.hpp"
 
 namespace renn::future {

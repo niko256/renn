@@ -4,6 +4,7 @@
 #include "Computation.hpp"
 #include <utility>
 #include "Role.hpp"
+#include "Continuation.hpp"
 
 namespace renn::future::thunk {
 

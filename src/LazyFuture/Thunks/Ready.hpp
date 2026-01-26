@@ -4,6 +4,8 @@
 #include "../Core/Computation.hpp"
 #include "../Core/Continuation.hpp"
 #include "../Core/Role.hpp"
+#include "../Comp/Immediate.hpp"
+#include <algorithm>
 #include <utility>
 
 namespace renn::future::thunk {
@@ -14,23 +16,10 @@ struct [[nodiscard]] Ready : role::ThunkBase<Ready<V>> {
 
     ValueType value_;
 
-    explicit Ready(V v)
-        : value_(std::move(v)) {}
+    explicit Ready(V v);
 
     Ready(Ready&&) = default;
     Ready& operator=(Ready&&) = default;
-
-    template <Continuation<V> Downstream>
-    struct ComputeValue : role::ComputationBase<ComputeValue<Downstream>> {
-        ValueType value_;
-        Downstream consumer_;
-
-        ComputeValue(ValueType v, Downstream c)
-            : value_(std::move(v)),
-              consumer_(std::move(c)) {};
-
-        void start(rt::View rt);
-    };
 
     template <Continuation<V> Downstream>
     Computation auto materialize(Downstream cons);
@@ -39,15 +28,13 @@ struct [[nodiscard]] Ready : role::ThunkBase<Ready<V>> {
 /* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 template <typename V>
-template <Continuation<V> Downstream>
-void Ready<V>::ComputeValue<Downstream>::start(rt::View rt) {
-    consumer_.proceed(std::move(value_), rt::State{rt});
-}
+Ready<V>::Ready(V v)
+    : value_(std::move(v)) {}
 
 template <typename V>
 template <Continuation<V> Downstream>
 Computation auto Ready<V>::materialize(Downstream cons) {
-    return ComputeValue<Downstream>{std::move(value_), std::move(cons)};
+    return comp::Immediate<V, Downstream>{std::move(value_), std::move(cons)};
 }
 
 }  // namespace renn::future::thunk

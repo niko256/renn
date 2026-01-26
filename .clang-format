@@ -12,7 +12,7 @@ AlignOperands: Align
 BreakBeforeBinaryOperators: All
 AlwaysBreakTemplateDeclarations: Yes
 AllowAllArgumentsOnNextLine: true
-AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: false
 BinPackArguments: false
 BinPackParameters: false
 AlignAfterOpenBracket: BlockIndent

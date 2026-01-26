@@ -1,3 +1,4 @@
+- Type-erased BoxedFuture
 - Work-Stealing Thread Pool
 - Bunch of sync primitives : [RwLock, FairMutex, ..., AsyncEvent, AsyncWaitGroup]
 - Profiling and Benchmarking
