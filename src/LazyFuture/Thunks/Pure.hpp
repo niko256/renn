@@ -19,13 +19,11 @@ struct [[nodiscard]] Pure : public role::ThunkBase<Pure> {
     Pure& operator=(const Pure&) = delete;
 
     template <Continuation<ValueType> Downstream>
-    Computation auto materialize(Downstream d);
+    Computation auto materialize(Downstream d) {
+        return comp::Immediate<typename Pure::ValueType, Downstream>{
+            unit, std::move(d)
+        };
+    }
 };
 
-template <Continuation<typename Pure::ValueType> Downstream>
-Computation auto Pure::materialize(Downstream d) {
-    return comp::Immediate<typename Pure::ValueType, Downstream>{
-        unit, std::move(d)
-    };
-}
 }  // namespace renn::future::thunk

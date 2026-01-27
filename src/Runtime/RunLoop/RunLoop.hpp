@@ -27,7 +27,7 @@ class RunLoop : public IExecutor, public timers::TScheduler {
 
     void stop();
 
-    void set(timers::Duration delay, timers::TimerBase* timer);
+    void set(timers::Duration delay, timers::TimerBase* timer) override;
 
     bool has_work(timers::Timepoint now) const;
 

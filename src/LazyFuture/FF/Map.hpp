@@ -20,8 +20,6 @@ struct [[nodiscard]] MapCombinator {
     SomeFuture auto pipe(Input in);
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
-
 template <typename F>
 MapCombinator<F>::MapCombinator(F user)
     : procedure_(std::move(user)) {}
@@ -33,6 +31,8 @@ SomeFuture auto MapCombinator<F>::pipe(Input in) {
 }
 
 }  // namespace pipe
+
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
 
 template <typename F>
 auto Map(F proc) {
