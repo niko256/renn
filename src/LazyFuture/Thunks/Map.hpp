@@ -15,7 +15,7 @@ namespace renn::future::thunk {
  * | Future<T> -> (T -> U) -> Future<U> |
  */
 template <Thunk Upstream, typename F>
-struct [[nodiscard]] Map : role::ThunkBase<Map<Upstream, F>> {
+struct [[nodiscard]] Map : public role::ThunkBase<Map<Upstream, F>> {
     using InputType = trait::ValueOf<Upstream>;
     using OutputType = std::invoke_result_t<F, InputType>;
 

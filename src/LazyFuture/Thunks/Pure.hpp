@@ -8,7 +8,7 @@
 
 namespace renn::future::thunk {
 
-struct [[nodiscard]] Pure : role::ThunkBase<Pure> {
+struct [[nodiscard]] Pure : public role::ThunkBase<Pure> {
     using ValueType = Unit;
 
     Pure() = default;
