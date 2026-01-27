@@ -42,12 +42,12 @@ inline bool has_timers(const View& v) {
     return std::get<1>(v) != nullptr;
 }
 
-inline View make_view(IExecutor& exe) {
-    return View{&exe, nullptr};
-}
+// inline View make_view(IExecutor& exe) {
+//     return View{&exe, nullptr};
+// }
 
-inline View make_view(IExecutor& exe, timers::TScheduler& sched) {
-    return View{&exe, &sched};
-}
+// inline View make_view(IExecutor& exe, timers::TScheduler& sched) {
+//     return View{&exe, &sched};
+// }
 
 }  // namespace renn::rt

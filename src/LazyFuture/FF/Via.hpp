@@ -3,7 +3,6 @@
 #include "../../Runtime/Core/View.hpp"
 #include "../Core/Future.hpp"
 #include "../Thunks/Via.hpp"
-#include "Core/IExecutor.hpp"
 
 namespace renn::future {
 
@@ -34,10 +33,6 @@ SomeFuture auto ViaCombinator::pipe(Input in) {
 
 inline auto Via(rt::View runtime) {
     return pipe::ViaCombinator{runtime};
-}
-
-inline auto Via(rt::IExecutor& exe) {
-    return pipe::ViaCombinator{rt::make_view(exe)};
 }
 
 }  // namespace renn::future

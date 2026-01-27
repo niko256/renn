@@ -11,7 +11,7 @@
 namespace renn::future::thunk {
 
 template <typename V>
-struct [[nodiscard]] Ready : role::ThunkBase<Ready<V>> {
+struct [[nodiscard]] Ready : public role::ThunkBase<Ready<V>> {
     using ValueType = V;
 
     ValueType value_;

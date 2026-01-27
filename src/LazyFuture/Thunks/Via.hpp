@@ -13,31 +13,23 @@ class [[nodiscard]] Via : public role::ThunkBase<Via<Upstream>> {
   public:
     using ValueType = trait::ValueOf<Upstream>;
 
-    Via(Upstream pr, rt::View runtime);
+    Via(Upstream pr, rt::View runtime)
+        : upstream_(std::move(pr)),
+          rt_(runtime) {}
 
     Via(Via&&) = default;
 
     template <Continuation<ValueType> Downstream>
-    Computation auto materialize(Downstream c);
+    Computation auto materialize(Downstream c) {
+        auto mutator
+            = cont::MutateState<ValueType, Downstream>{rt_, std::move(c)};
+
+        return upstream_.materialize(std::move(mutator));
+    }
 
   private:
     Upstream upstream_;
     rt::View rt_;
 };
-
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
-
-template <Thunk Upstream>
-Via<Upstream>::Via(Upstream pr, rt::View runtime)
-    : upstream_(std::move(pr)),
-      rt_(runtime) {}
-
-template <Thunk Upstream>
-template <Continuation<typename Via<Upstream>::ValueType> Downstream>
-Computation auto Via<Upstream>::materialize(Downstream c) {
-    auto mutator = cont::MutateState<ValueType, Downstream>{rt_, std::move(c)};
-
-    return upstream_.materialize(std::move(mutator));
-}
 
 }  // namespace renn::future::thunk
