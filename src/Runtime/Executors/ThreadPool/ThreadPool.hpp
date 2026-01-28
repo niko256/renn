@@ -2,7 +2,6 @@
 
 #include "../../Core/IExecutor.hpp"
 #include "../../Core/Renn.hpp"
-#include "Core/View.hpp"
 #include "IntrusiveQueue.hpp"
 #include <atomic>
 #include <cassert>

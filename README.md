@@ -1,4 +1,4 @@
-**renn**
+## renn
 
 A tiny experimental async runtime for learning and playing with concurrency.
 
