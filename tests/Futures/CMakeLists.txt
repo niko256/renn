@@ -9,7 +9,7 @@ ADD_EXECUTABLE(LFutureTests
 )
 
 TARGET_LINK_LIBRARIES(LFutureTests PRIVATE
-  # Fiber
+  Fiber
   LazyFuture
   ThreadPool
   gtest_main

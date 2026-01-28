@@ -7,7 +7,8 @@ namespace renn::future {
 /**
  * @PHILOSOPHY
  * Computation is like a compiled assembly - the abstract plan (Thunk)
- * has been compiled into concrete executable structure.
+ * has been compiled into concrete structure
+ * that _pinned_ in memory and ready to be executed.
  */
 
 template <typename C>
