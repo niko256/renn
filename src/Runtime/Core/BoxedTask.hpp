@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../../Utils/Routine.hpp"
-#include "Renn.hpp"
+#include "Task.hpp"
 #include <utility>
 
 namespace renn::rt {
 
-struct BoxedRenn : RennBase {
+struct BoxedRenn : TaskBase {
     utils::Routine fun_;
 
     explicit BoxedRenn(utils::Routine f);

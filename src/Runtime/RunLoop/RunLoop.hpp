@@ -21,7 +21,7 @@ class RunLoop : public IExecutor, public timers::TScheduler {
 
     operator View();
 
-    void submit(RennBase* renn) override;
+    void submit(TaskBase* task) override;
 
     void run();
 
@@ -32,7 +32,7 @@ class RunLoop : public IExecutor, public timers::TScheduler {
     bool has_work(timers::Timepoint now) const;
 
   private:
-    vvv::IntrusiveList<RennBase> renns_;
+    vvv::IntrusiveList<TaskBase> renns_;
     timers::IntrusiveTimerQueue timers_;
 
     std::mutex mtx_;

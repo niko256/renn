@@ -2,7 +2,7 @@
 
 #include "../Timerrrs/TScheduler.hpp"
 #include "IExecutor.hpp"
-#include "Renn.hpp"
+#include "Task.hpp"
 #include <tuple>
 
 namespace renn::rt {
@@ -25,7 +25,7 @@ inline timers::TScheduler& timers(const View& rt) {
     return *timers;
 }
 
-inline void submit(const View& rt, RennBase* renn) {
+inline void submit(const View& rt, TaskBase* renn) {
     executor(rt).submit(renn);
 }
 

@@ -6,7 +6,7 @@ SandBox::operator View() {
     return {this, this};
 }
 
-void SandBox::submit(RennBase* task) {
+void SandBox::submit(TaskBase* task) {
     tasks_.PushBack(task);
 }
 
@@ -19,7 +19,7 @@ size_t SandBox::run_at_most_tasks(size_t limit) {
     size_t executed = 0;
 
     while (executed < limit && !tasks_.IsEmpty()) {
-        RennBase* task = tasks_.TryPopFront();
+        TaskBase* task = tasks_.TryPopFront();
         if (task) {
             task->run();
             ++executed;
@@ -33,7 +33,7 @@ size_t SandBox::run_tasks() {
     size_t executed = 0;
 
     while (!tasks_.IsEmpty()) {
-        RennBase* task = tasks_.TryPopFront();
+        TaskBase* task = tasks_.TryPopFront();
         if (task) {
             task->run();
             ++executed;

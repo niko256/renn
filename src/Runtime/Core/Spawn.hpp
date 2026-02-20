@@ -1,8 +1,8 @@
 #pragma once
 
-#include "BoxedRenn.hpp"
+#include "BoxedTask.hpp"
 #include "IExecutor.hpp"
-#include "Renn.hpp"
+#include "Task.hpp"
 
 namespace renn {
 
@@ -13,7 +13,7 @@ void spawn(rt::IExecutor& where, F&& owned) {
 }
 
 /* Intrusive */
-inline void submit(rt::IExecutor& where, RennBase* renn) {
+inline void submit(rt::IExecutor& where, TaskBase* renn) {
     where.submit(renn);
 }
 

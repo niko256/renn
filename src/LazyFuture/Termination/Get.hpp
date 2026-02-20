@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Runtime/Core/Renn.hpp"
+#include "../../Runtime/Core/Task.hpp" 
 #include "../../Runtime/RunLoop/RunLoop.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
@@ -12,7 +12,7 @@
 namespace renn::future::thunk {
 
 template <Thunk T>
-class [[nodiscard]] Receiver : public RennBase {
+class [[nodiscard]] Receiver : public TaskBase {
   public:
     using ValueType = trait::ValueOf<T>;
 

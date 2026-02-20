@@ -11,8 +11,8 @@ struct IRenn {
     ~IRenn() = default;
 };
 
-struct RennBase : IRenn, vvv::IntrusiveListNode<RennBase> {
-    RennBase() = default;
+struct TaskBase : IRenn, vvv::IntrusiveListNode<TaskBase> {
+    TaskBase() = default;
 };
 
 }  // namespace renn

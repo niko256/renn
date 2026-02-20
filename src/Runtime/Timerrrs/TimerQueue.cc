@@ -25,7 +25,7 @@ std::optional<Timepoint> IntrusiveTimerQueue::next_deadline() const {
     return std::nullopt;
 }
 
-bool IntrusiveTimerQueue::move_expired_to(Timepoint now, vvv::IntrusiveList<RennBase>& task_queue) {
+bool IntrusiveTimerQueue::move_expired_to(Timepoint now, vvv::IntrusiveList<TaskBase>& task_queue) {
     bool moved = false;
 
     while (!list_.IsEmpty()) {

@@ -17,7 +17,7 @@ class IntrusiveTimerQueue {
     std::optional<Timepoint> next_deadline() const;
 
     // Moves expired timers to the provided task list
-    bool move_expired_to(Timepoint now, vvv::IntrusiveList<RennBase>& task_queue);
+    bool move_expired_to(Timepoint now, vvv::IntrusiveList<TaskBase>& task_queue);
 
   private:
     vvv::IntrusiveList<TimerBase> list_;
