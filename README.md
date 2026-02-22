@@ -2,7 +2,8 @@
 
 A tiny experimental async runtime for learning and playing with concurrency.
 
-<!> Warning : this project exists purely for education and experimentation.
+> [!Warning]
+> <!> This project exists primarily for educational and experimental purposes.
 
 ---
 
