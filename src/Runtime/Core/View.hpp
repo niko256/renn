@@ -13,13 +13,13 @@ using View = std::tuple<
 
 /* ... */
 
-inline IExecutor& executor(const View& v) {
+inline auto executor(const View& v) -> IExecutor& {
     rt::IExecutor* exe = std::get<0>(v);
     assert(exe != nullptr && "Executor is not available...");
     return *exe;
 }
 
-inline timers::TScheduler& timers(const View& rt) {
+inline auto timers(const View& rt) -> timers::TScheduler& {
     timers::TScheduler* timers = std::get<1>(rt);
     assert(timers != nullptr && "Timers are not available...");
     return *timers;
@@ -29,8 +29,7 @@ inline void submit(const View& rt, TaskBase* renn) {
     executor(rt).submit(renn);
 }
 
-inline void
-set_timer(const View& rt, timers::Duration delay, timers::TimerBase* timer) {
+inline void set_timer(const View& rt, timers::Duration delay, timers::TimerBase* timer) {
     timers(rt).set(delay, timer);
 }
 
@@ -46,7 +45,7 @@ inline View make_view(IExecutor& exe) {
     return View{&exe, nullptr};
 }
 
-inline View make_view(IExecutor& exe, timers::TScheduler& sched) {
+inline auto make_view(IExecutor& exe, timers::TScheduler& sched) -> View {
     return View{&exe, &sched};
 }
 

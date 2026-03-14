@@ -7,7 +7,7 @@ SandBox::operator View() {
 }
 
 void SandBox::submit(TaskBase* task) {
-    tasks_.PushBack(task);
+    tasks_.push_back(*task);
 }
 
 void SandBox::set(timers::Duration delay, timers::TimerBase* timer) {
@@ -18,8 +18,8 @@ void SandBox::set(timers::Duration delay, timers::TimerBase* timer) {
 size_t SandBox::run_at_most_tasks(size_t limit) {
     size_t executed = 0;
 
-    while (executed < limit && !tasks_.IsEmpty()) {
-        TaskBase* task = tasks_.TryPopFront();
+    while (executed < limit && !tasks_.empty()) {
+        TaskBase* task = tasks_.try_pop_front();
         if (task) {
             task->run();
             ++executed;
@@ -32,8 +32,8 @@ size_t SandBox::run_at_most_tasks(size_t limit) {
 size_t SandBox::run_tasks() {
     size_t executed = 0;
 
-    while (!tasks_.IsEmpty()) {
-        TaskBase* task = tasks_.TryPopFront();
+    while (!tasks_.empty()) {
+        TaskBase* task = tasks_.try_pop_front();
         if (task) {
             task->run();
             ++executed;
@@ -47,7 +47,7 @@ size_t SandBox::fire_ready_timers() {
     auto ready = timers_.extract_ready(clock_.now());
 
     for (timers::TimerBase* timer : ready) {
-        tasks_.PushBack(timer);
+        tasks_.push_back(*timer);
     }
 
     return ready.size();

@@ -2,9 +2,9 @@
 
 namespace renn::timers {
 
-void IntrusiveTimerQueue::add(TimerBase* timer) {
-    list_.push_back(timer);
-}
+  void IntrusiveTimerQueue::add(TimerBase* timer) {
+      list_.push_back(*timer);
+  }
 
 bool IntrusiveTimerQueue::empty() const {
     return list_.empty();
@@ -19,10 +19,7 @@ std::optional<Timepoint> IntrusiveTimerQueue::next_deadline() const {
     return front.deadline;
 }
 
-bool IntrusiveTimerQueue::move_expired_to(
-    Timepoint now,
-    IntrusiveList<TaskBase>& task_queue
-) {
+bool IntrusiveTimerQueue::move_expired_to(Timepoint now, IntrusiveList<TaskBase>& task_queue) {
     bool moved = false;
 
     while (!list_.empty()) {

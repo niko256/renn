@@ -4,9 +4,7 @@
 namespace renn::exe {
 
 ThreadPool::ThreadPool(size_t num_threads)
-    : num_threads_(
-          num_threads > 0 ? num_threads : std::thread::hardware_concurrency()
-      ) {}
+    : num_threads_(num_threads > 0 ? num_threads : std::thread::hardware_concurrency()) {}
 
 /// [condition]: destructor must be called after close()
 ThreadPool::~ThreadPool() {
@@ -35,7 +33,7 @@ void ThreadPool::submit(TaskBase* procedure) {
         return;
     }
 
-    renns_.push(std::move(procedure));
+    tasks_.push(std::move(procedure));
 }
 
 /// Stops the pool [waits for all worker threads to finish]
@@ -49,7 +47,7 @@ void ThreadPool::stop() {
 
     // closing the queue is th signal to worker threads to stop working for new
     // renns and exit their loop
-    renns_.close();
+    tasks_.close();
 
     // waits for all worker threads to complete their execution
     // [bc when stop() returns, all thread resources must be released]
@@ -73,7 +71,7 @@ void ThreadPool::worker_loop() {
 
     while (true) {
         // pops blocks untill task is available OR the queue is closed
-        TaskBase* task = renns_.pop();
+        TaskBase* task = tasks_.pop();
 
         if (!task) {
             // the worker's job is done
@@ -81,7 +79,7 @@ void ThreadPool::worker_loop() {
         }
 
         try {
-            // executing the task 
+            // executing the task
             task->run();
         } catch (...) {
             // if a submitted task throws an exception that is doesn't handle

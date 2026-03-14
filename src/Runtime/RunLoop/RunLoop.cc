@@ -10,7 +10,7 @@ RunLoop::operator View() {
 void RunLoop::submit(TaskBase* task) {
     {
         std::lock_guard lock(mtx_);
-        renns_.PushBack(task);
+        tasks_.push_back(*task);
     }
     condvar_.notify_one();
 }
@@ -32,10 +32,10 @@ void RunLoop::run() {
             std::unique_lock lock(mtx_);
 
             while (true) {
-                timers_.move_expired_to(std::chrono::steady_clock::now(), renns_);
+                timers_.move_expired_to(std::chrono::steady_clock::now(), tasks_);
 
-                if (!renns_.IsEmpty()) {
-                    task = renns_.TryPopFront();
+                if (!tasks_.empty()) {
+                    task = tasks_.try_pop_front();
                     break;
                 }
 

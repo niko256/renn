@@ -32,7 +32,7 @@ class ThreadPool : public rt::IExecutor {
     void worker_loop();
 
   private:
-    UnboundedBlockingQueue<TaskBase> renns_;
+    UnboundedBlockingQueue<TaskBase> tasks_;
     const size_t num_threads_;
     std::vector<std::thread> workers_;
 
