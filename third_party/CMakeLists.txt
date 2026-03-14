@@ -3,44 +3,44 @@ INCLUDE(FetchContent)
 # GoogleTest
 FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG main
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG main
 )
 
 
 # sure ^-^
 FetchContent_Declare(
     sure
-    GIT_REPOSITORY https://gitlab.com/Lipovsky/sure.git
-    GIT_TAG master
+      GIT_REPOSITORY https://gitlab.com/Lipovsky/sure.git
+      GIT_TAG master
 )
 
 # sure-stack
 FetchContent_Declare(
     sure-stack
-    GIT_REPOSITORY https://gitlab.com/Lipovsky/sure-stack.git
-    GIT_TAG master
+      GIT_REPOSITORY https://gitlab.com/Lipovsky/sure-stack.git
+      GIT_TAG master
 )
 
-# Horovod ^_^
+# ^_^
 FetchContent_Declare(
-    vvv
-    GIT_REPOSITORY https://gitlab.com/Lipovsky/vvv.git
+  ntrusive
+    GIT_REPOSITORY https://github.com/niko256/ntrusive.git
     GIT_TAG master
 )
 
 # fu2
 FetchContent_Declare(
   function2
-  GIT_REPOSITORY https://github.com/Naios/function2.git
-  GIT_TAG master
+    GIT_REPOSITORY https://github.com/Naios/function2.git
+    GIT_TAG master
 )
 
 # futex-like
 FetchContent_Declare(
   futex_like
-  GIT_REPOSITORY https://gitlab.com/Lipovsky/futex_like.git
-  GIT_TAG master
+    GIT_REPOSITORY https://gitlab.com/Lipovsky/futex_like.git
+    GIT_TAG master
 )
 
 
@@ -48,7 +48,7 @@ FetchContent_MakeAvailable(
   googletest
   sure
   sure-stack
-  vvv
+  ntrusive
   function2
   futex_like
 )
@@ -67,10 +67,10 @@ IF(sure-stack_POPULATED)
       ${sure-stack_SOURCE_DIR}/source)
 ENDIF()
 
-IF (vvv_POPULATED)
-  ADD_LIBRARY(third_party_vvv INTERFACE)
-  TARGET_INCLUDE_DIRECTORIES(third_party_vvv INTERFACE
-    ${vvv_SOURCE_DIR}/source)
+IF (ntrusive_POPULATED)
+  ADD_LIBRARY(third_party_ntrusive INTERFACE)
+  TARGET_INCLUDE_DIRECTORIES(third_party_ntrusive INTERFACE
+    ${ntrusive_SOURCE_DIR}/include)
 ENDIF()
 
 IF (function2_POPULATED)

@@ -7,7 +7,6 @@
 #include "Awaiter.hpp"
 #include "Handle.hpp"
 #include "function2/function2.hpp"
-#include <vvv/list.hpp>
 
 namespace renn::fiber {
 

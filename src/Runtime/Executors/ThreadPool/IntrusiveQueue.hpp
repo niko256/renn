@@ -2,7 +2,7 @@
 
 #include <condition_variable>
 #include <mutex>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::exe {
 
@@ -30,13 +30,14 @@ class UnboundedBlockingQueue {
     bool is_closed() const;
 
   private:
-    vvv::IntrusiveList<T> task_queue_;
+    IntrusiveList<T> task_queue_;
     mutable std::mutex mtx_;
     std::condition_variable cv_;
     bool is_closed_{false};
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-|
+ */
 
 template <typename T>
 void UnboundedBlockingQueue<T>::push(T* item) {
@@ -56,10 +57,9 @@ template <typename T>
 T* UnboundedBlockingQueue<T>::pop() {
     std::unique_lock<std::mutex> lock(mtx_);
 
-    // Waits until queue is not empty OR it has been closed and no more items will be ever produced
-    cv_.wait(lock, [this] {
-        return !task_queue_.IsEmpty() || is_closed_;
-    });
+    // Waits until queue is not empty OR it has been closed and no more items
+    // will be ever produced
+    cv_.wait(lock, [this] { return !task_queue_.IsEmpty() || is_closed_; });
 
     // After waking up we have to check the conditions of the queue
     if (task_queue_.IsEmpty() && is_closed_) {

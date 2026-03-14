@@ -1,4 +1,4 @@
-<h1 align="center"> renn </h1>
+# <h1 align="center"> renn </h1>
 
 A tiny experimental async runtime for learning and playing with concurrency.
 

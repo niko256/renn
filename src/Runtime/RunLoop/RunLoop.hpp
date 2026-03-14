@@ -6,7 +6,7 @@
 #include "../Timerrrs/TimerQueue.hpp"
 #include <condition_variable>
 #include <mutex>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::rt {
 
@@ -32,7 +32,7 @@ class RunLoop : public IExecutor, public timers::TScheduler {
     bool has_work(timers::Timepoint now) const;
 
   private:
-    vvv::IntrusiveList<TaskBase> renns_;
+    IntrusiveList<TaskBase> renns_;
     timers::IntrusiveTimerQueue timers_;
 
     std::mutex mtx_;

@@ -6,7 +6,7 @@
 #include "../Timerrrs/VClock.hpp"
 #include "TimerQueue.hpp"
 #include <cstddef>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::rt {
 
@@ -55,7 +55,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
 
   private:
     timers::VClock clock_;
-    vvv::IntrusiveList<TaskBase> tasks_;
+    IntrusiveList<TaskBase> tasks_;
     SandBoxTimerQueue timers_;
 };
 

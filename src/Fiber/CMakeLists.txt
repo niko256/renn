@@ -22,7 +22,7 @@ TARGET_INCLUDE_DIRECTORIES(Fiber PUBLIC
 
 
 TARGET_LINK_LIBRARIES(Fiber PUBLIC
-  third_party_vvv
+  third_party_ntrusive
   Coroutine
   RtCore
   Utils

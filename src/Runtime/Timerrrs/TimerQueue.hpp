@@ -3,7 +3,7 @@
 #include "Time.hpp"
 #include "TimerBase.hpp"
 #include <optional>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::timers {
 
@@ -17,10 +17,10 @@ class IntrusiveTimerQueue {
     std::optional<Timepoint> next_deadline() const;
 
     // Moves expired timers to the provided task list
-    bool move_expired_to(Timepoint now, vvv::IntrusiveList<TaskBase>& task_queue);
+    bool move_expired_to(Timepoint now, IntrusiveList<TaskBase>& task_queue);
 
   private:
-    vvv::IntrusiveList<TimerBase> list_;
+    IntrusiveList<TimerBase> list_;
 };
 
 }  // namespace renn::timers
