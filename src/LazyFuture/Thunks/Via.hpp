@@ -13,11 +13,11 @@ class [[nodiscard]] Via : public role::ThunkBase<Via<Upstream>> {
   public:
     using ValueType = trait::ValueOf<Upstream>;
 
+    Via(Via&&) = default;
+
     Via(Upstream pr, rt::View runtime)
         : upstream_(std::move(pr)),
           rt_(runtime) {}
-
-    Via(Via&&) = default;
 
     template <Continuation<ValueType> Downstream>
     Computation auto materialize(Downstream c) {
