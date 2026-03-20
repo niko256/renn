@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace renn::timers {
+namespace renn::time {
 
 /* Duration type for delays */
 using Duration = std::chrono::milliseconds;
@@ -12,7 +12,4 @@ using SystemClock = std::chrono::steady_clock;
 
 using Timepoint = std::chrono::steady_clock::time_point;
 
-/* virtual time for SandBox */
-using Instant = Duration;
-
-};  // namespace renn::timers
+};  // namespace renn::time

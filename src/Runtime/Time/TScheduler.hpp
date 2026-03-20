@@ -3,7 +3,7 @@
 #include "Time.hpp"
 #include "TimerBase.hpp"
 
-namespace renn::timers {
+namespace renn::time {
 
 /**
  * @brief Interface for scheduling delayed tasks.
@@ -17,4 +17,4 @@ class TScheduler {
 };
 
 
-};  // namespace renn::timers
+};  // namespace renn::time
