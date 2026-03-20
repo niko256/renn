@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Continuation/Continuation.hpp"
-#include "../../Runtime/Core/Renn.hpp"
+#include "../../Runtime/Core/Task.hpp"
 #include "../../Runtime/Core/State.hpp"
 #include <algorithm>
 #include <optional>
@@ -9,7 +9,7 @@
 namespace renn::future::cont {
 
 template <typename In, typename Out, typename F, typename Downstream>
-struct Transform : role::ContinuationTag, public RennBase {
+struct Transform : role::ContinuationTag, public TaskBase {
     using InputValue = In;
     using OutputValue = Out;
 

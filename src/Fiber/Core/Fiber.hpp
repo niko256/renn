@@ -1,13 +1,12 @@
 #pragma once
 
 #include "../../Runtime/Core/IExecutor.hpp"
-#include "../../Runtime/Core/Renn.hpp"
+#include "../../Runtime/Core/Task.hpp"
 #include "../Coroutine/Coro.hpp"
 #include "../Utils/Routine.hpp"
 #include "Awaiter.hpp"
 #include "Handle.hpp"
 #include "function2/function2.hpp"
-#include <vvv/list.hpp>
 
 namespace renn::fiber {
 
@@ -15,7 +14,7 @@ using SuspendHandler = fu2::unique_function<void(FiberHandle)>;
 
 /*** Fiber = Stackful coroutine x Scheduler ***/
 
-class Fiber : public RennBase {
+class Fiber : public TaskBase {
   public:
     explicit Fiber(rt::IExecutor&, utils::Routine);
 

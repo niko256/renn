@@ -8,5 +8,5 @@ TARGET_INCLUDE_DIRECTORIES(ThreadPool PUBLIC
 
 TARGET_LINK_LIBRARIES(ThreadPool PUBLIC
   RtCore
-  third_party_vvv
+  third_party_ntrusive
 )

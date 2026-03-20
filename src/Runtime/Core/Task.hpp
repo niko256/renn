@@ -1,6 +1,5 @@
 #pragma once
-
-#include "vvv/list.hpp"
+#include <ntrusive/intrusive.hpp>
 
 namespace renn {
 
@@ -11,8 +10,8 @@ struct IRenn {
     ~IRenn() = default;
 };
 
-struct RennBase : IRenn, vvv::IntrusiveListNode<RennBase> {
-    RennBase() = default;
+struct TaskBase : IRenn, IntrusiveListNode {
+    TaskBase() = default;
 };
 
 }  // namespace renn

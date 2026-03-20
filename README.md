@@ -1,8 +1,9 @@
-## renn
+# <h1 align="center"> renn </h1>
 
 A tiny experimental async runtime for learning and playing with concurrency.
 
-<!> Warning : this project exists purely for education and experimentation.
+> [!Warning]
+> <!> This project exists primarily for educational and experimental purposes.
 
 ---
 
@@ -22,18 +23,6 @@ At the moment the runtime exposes a few classic building blocks:
 - Functional Lazy Futures - values that will (maybe) be available later
 - Timers infrastructure
 - Scheduling - T.O.D.O...
-
----
-
-## What is a 'renn'?
-
-While working on this, i got tired of saying "fiber/coroutine/task/job/whatever", so i "invented" my own term for "a scheduled executable unit" in this runtime.
-
-I call it a **renn** (from the German verb **_rennen_** - "to run").
-
-So, the scheduler doesn't really care what higher-level abstraction you use - it just submit renns.
-
-Maybe it is mildly confusing. But i just like building abstractions.
 
 ---
 

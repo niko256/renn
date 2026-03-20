@@ -1,8 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <condition_variable>
 #include <mutex>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::exe {
 
@@ -27,16 +28,17 @@ class UnboundedBlockingQueue {
     // Wakes up all waiting consumers
     void close();
 
-    bool is_closed() const;
+    bool closed() const;
 
   private:
-    vvv::IntrusiveList<T> task_queue_;
+    IntrusiveList<T> task_queue_;
     mutable std::mutex mtx_;
     std::condition_variable cv_;
     bool is_closed_{false};
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-|
+ */
 
 template <typename T>
 void UnboundedBlockingQueue<T>::push(T* item) {
@@ -45,7 +47,7 @@ void UnboundedBlockingQueue<T>::push(T* item) {
     {
         std::unique_lock<std::mutex> lock(mtx_);
 
-        task_queue_.PushBack(std::move(item));
+        task_queue_.push_back(*item);
     }
 
     // Notify one waiting thread that new element is available
@@ -56,18 +58,17 @@ template <typename T>
 T* UnboundedBlockingQueue<T>::pop() {
     std::unique_lock<std::mutex> lock(mtx_);
 
-    // Waits until queue is not empty OR it has been closed and no more items will be ever produced
-    cv_.wait(lock, [this] {
-        return !task_queue_.IsEmpty() || is_closed_;
-    });
+    // Waits until queue is not empty OR it has been closed and no more items
+    // will be ever produced
+    cv_.wait(lock, [this] { return !task_queue_.empty() || is_closed_; });
 
     // After waking up we have to check the conditions of the queue
-    if (task_queue_.IsEmpty() && is_closed_) {
+    if (task_queue_.empty() && is_closed_) {
         return nullptr;
     }
 
     // Otherwise, there must be an item in the queue
-    return task_queue_.TryPopFront();
+    return task_queue_.try_pop_front();
 }
 
 template <typename T>
@@ -84,7 +85,7 @@ void UnboundedBlockingQueue<T>::close() {
 }
 
 template <typename T>
-bool UnboundedBlockingQueue<T>::is_closed() const {
+bool UnboundedBlockingQueue<T>::closed() const {
     std::lock_guard lock(mtx_);
     return is_closed_;
 }

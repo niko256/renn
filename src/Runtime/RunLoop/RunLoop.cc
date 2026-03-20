@@ -7,10 +7,10 @@ RunLoop::operator View() {
     return {this, this};
 }
 
-void RunLoop::submit(RennBase* renn) {
+void RunLoop::submit(TaskBase* task) {
     {
         std::lock_guard lock(mtx_);
-        renns_.PushBack(renn);
+        tasks_.push_back(*task);
     }
     condvar_.notify_one();
 }
@@ -26,16 +26,16 @@ void RunLoop::set(timers::Duration delay, timers::TimerBase* timer) {
 
 void RunLoop::run() {
     while (true) {
-        RennBase* renn = nullptr;
+        TaskBase* task = nullptr;
 
         {
             std::unique_lock lock(mtx_);
 
             while (true) {
-                timers_.move_expired_to(std::chrono::steady_clock::now(), renns_);
+                timers_.move_expired_to(std::chrono::steady_clock::now(), tasks_);
 
-                if (!renns_.IsEmpty()) {
-                    renn = renns_.TryPopFront();
+                if (!tasks_.empty()) {
+                    task = tasks_.try_pop_front();
                     break;
                 }
 
@@ -54,9 +54,9 @@ void RunLoop::run() {
             }
         }
 
-        if (renn) {
+        if (task) {
             try {
-                renn->run();
+                task->run();
             } catch (...) {
                 std::abort();
             }

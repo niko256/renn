@@ -4,9 +4,7 @@
 namespace renn::exe {
 
 ThreadPool::ThreadPool(size_t num_threads)
-    : num_threads_(
-          num_threads > 0 ? num_threads : std::thread::hardware_concurrency()
-      ) {}
+    : num_threads_(num_threads > 0 ? num_threads : std::thread::hardware_concurrency()) {}
 
 /// [condition]: destructor must be called after close()
 ThreadPool::~ThreadPool() {
@@ -27,7 +25,7 @@ void ThreadPool::start() {
 
 /// submits renns for execution
 /// [condition] : it must be called after start() and before stop()
-void ThreadPool::submit(RennBase* procedure) {
+void ThreadPool::submit(TaskBase* procedure) {
     // just ensure here that user follows the pool's lifecycle 'contract'
     assert(!stopped_);
 
@@ -35,7 +33,7 @@ void ThreadPool::submit(RennBase* procedure) {
         return;
     }
 
-    renns_.push(std::move(procedure));
+    tasks_.push(std::move(procedure));
 }
 
 /// Stops the pool [waits for all worker threads to finish]
@@ -49,7 +47,7 @@ void ThreadPool::stop() {
 
     // closing the queue is th signal to worker threads to stop working for new
     // renns and exit their loop
-    renns_.close();
+    tasks_.close();
 
     // waits for all worker threads to complete their execution
     // [bc when stop() returns, all thread resources must be released]
@@ -72,22 +70,22 @@ void ThreadPool::worker_loop() {
     current_pool_ = this;
 
     while (true) {
-        // pops blocks untill renn is available OR the queue is closed
-        RennBase* renn = renns_.pop();
+        // pops blocks untill task is available OR the queue is closed
+        TaskBase* task = tasks_.pop();
 
-        if (!renn) {
+        if (!task) {
             // the worker's job is done
             break;
         }
 
         try {
-            // executing the renn
-            renn->run();
+            // executing the task
+            task->run();
         } catch (...) {
-            // if a submitted renn throws an exception that is doesn't handle
+            // if a submitted task throws an exception that is doesn't handle
             // internally, we catch it here
             //
-            // !!! : A renn that allows an exception to escape is violating its
+            // !!! : A task that allows an exception to escape is violating its
             // contract
             // !!! and has likely left application in a corrupted, unknowm state
             // [broken invariants etc..]

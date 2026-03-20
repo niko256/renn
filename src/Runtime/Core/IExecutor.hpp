@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Renn.hpp"
+#include "Task.hpp"
 
 namespace renn::rt {
 
 class IExecutor {
   public:
-    virtual void submit(RennBase*) = 0;
+    virtual void submit(TaskBase*) = 0;
 
     ~IExecutor() = default;
 };

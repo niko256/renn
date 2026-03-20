@@ -8,4 +8,5 @@
 - Replace blocking queues wiith lock-free ones [where it is necessary]
 - Select! for fibers
 - Cancellation and Structured Concurrency
+- Fiber Snapshot
 - ...

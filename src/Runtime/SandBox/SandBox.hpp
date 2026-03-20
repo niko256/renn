@@ -6,7 +6,7 @@
 #include "../Timerrrs/VClock.hpp"
 #include "TimerQueue.hpp"
 #include <cstddef>
-#include <vvv/list.hpp>
+#include <ntrusive/intrusive.hpp>
 
 namespace renn::rt {
 
@@ -21,7 +21,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
     /* =*= View =*= */
     operator View();
 
-    void submit(RennBase* task) override;
+    void submit(TaskBase* task) override;
 
     void set(timers::Duration delay, timers::TimerBase* timer) override;
 
@@ -55,7 +55,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
 
   private:
     timers::VClock clock_;
-    vvv::IntrusiveList<RennBase> tasks_;
+    IntrusiveList<TaskBase> tasks_;
     SandBoxTimerQueue timers_;
 };
 

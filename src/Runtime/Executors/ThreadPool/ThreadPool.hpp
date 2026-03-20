@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Core/IExecutor.hpp"
-#include "../../Core/Renn.hpp"
+#include "../../Core/Task.hpp"
 #include "IntrusiveQueue.hpp"
 #include <atomic>
 #include <cassert>
@@ -26,13 +26,13 @@ class ThreadPool : public rt::IExecutor {
 
     static ThreadPool* current();
 
-    void submit(RennBase* procedure) override;
+    void submit(TaskBase* procedure) override;
 
   private:
     void worker_loop();
 
   private:
-    UnboundedBlockingQueue<RennBase> renns_;
+    UnboundedBlockingQueue<TaskBase> tasks_;
     const size_t num_threads_;
     std::vector<std::thread> workers_;
 
