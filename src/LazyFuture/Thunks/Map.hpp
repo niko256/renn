@@ -6,7 +6,6 @@
 #include "../Trait/ValueOf.hpp"
 #include "../Continuation/Transform.hpp"
 #include <algorithm>
-#include <optional>
 #include <type_traits>
 
 namespace renn::future::thunk {
@@ -15,7 +14,7 @@ namespace renn::future::thunk {
  * | Future<T> -> (T -> U) -> Future<U> |
  */
 template <Thunk Upstream, typename F>
-struct [[nodiscard]] Map : public role::ThunkBase<Map<Upstream, F>> {
+struct Map final : public role::ThunkBase<Map<Upstream, F>> {
     using InputType = trait::ValueOf<Upstream>;
     using OutputType = std::invoke_result_t<F, InputType>;
 
@@ -30,10 +29,9 @@ struct [[nodiscard]] Map : public role::ThunkBase<Map<Upstream, F>> {
 
     template <Continuation<OutputType> Downstream>
     Computation auto materialize(Downstream cont) {
-        auto transformer
-            = cont::Transform<InputType, OutputType, F, Downstream>{
-                std::move(procedure_), std::move(cont)
-            };
+        auto transformer = cont::Transform<InputType, OutputType, F, Downstream>{
+            std::move(procedure_), std::move(cont)
+        };
 
         /* let producer wrap up and materialize continuation of this stage */
         return producer_.materialize(std::move(transformer));

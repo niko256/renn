@@ -12,7 +12,11 @@
 namespace renn::future::thunk {
 
 template <Thunk Upstream, typename F>
-class [[nodiscard]] FlatMap : public role::ThunkBase<FlatMap<Upstream, F>> {
+class FlatMap final : public role::ThunkBase<FlatMap<Upstream, F>> {
+  private:
+    Upstream upstream_;
+    F func_;
+
   public:
     using InputType = trait::ValueOf<Upstream>;
     using InnerFuture = std::invoke_result_t<F, InputType>;
@@ -28,17 +32,12 @@ class [[nodiscard]] FlatMap : public role::ThunkBase<FlatMap<Upstream, F>> {
     Computation auto materialize(Downstream d) {
         auto unwrap = cont::Unwrap<InnerFuture, Downstream>{std::move(d)};
 
-        auto transform
-            = cont::Transform<InputType, InnerFuture, F, decltype(unwrap)>{
-                std::move(func_), std::move(unwrap)
-            };
+        auto transform = cont::Transform<InputType, InnerFuture, F, decltype(unwrap)>{
+            std::move(func_), std::move(unwrap)
+        };
 
         return upstream_.materialize(std::move(transform));
     }
-
-  private:
-    Upstream upstream_;
-    F func_;
 };
 
 }  // namespace renn::future::thunk

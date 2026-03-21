@@ -13,9 +13,9 @@ struct ContinuationTag {};
 namespace renn::future {
 
 template <typename C, typename V>
-concept Continuation = std::derived_from<C, role::ContinuationTag>
-                       && requires(C cont, V v, rt::State st) {
-                              { cont.proceed(std::move(v), st) };
-                          };
+concept Continuation
+    = std::derived_from<C, role::ContinuationTag> && requires(C cont, V v, rt::State st) {
+          { cont.proceed(std::move(v), st) };
+      };
 
 }  // namespace renn::future

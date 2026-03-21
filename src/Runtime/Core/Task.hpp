@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ntrusive/intrusive.hpp>
 
 namespace renn {

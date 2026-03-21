@@ -9,7 +9,11 @@
 namespace renn::future::thunk {
 
 template <Thunk Upstream>
-class [[nodiscard]] Via : public role::ThunkBase<Via<Upstream>> {
+class Via : public role::ThunkBase<Via<Upstream>> {
+  private:
+    Upstream upstream_;
+    rt::View rt_;
+
   public:
     using ValueType = trait::ValueOf<Upstream>;
 
@@ -21,15 +25,10 @@ class [[nodiscard]] Via : public role::ThunkBase<Via<Upstream>> {
 
     template <Continuation<ValueType> Downstream>
     Computation auto materialize(Downstream c) {
-        auto mutator
-            = cont::MutateState<ValueType, Downstream>{rt_, std::move(c)};
+        auto mutator = cont::MutateState<ValueType, Downstream>{rt_, std::move(c)};
 
         return upstream_.materialize(std::move(mutator));
     }
-
-  private:
-    Upstream upstream_;
-    rt::View rt_;
 };
 
 }  // namespace renn::future::thunk

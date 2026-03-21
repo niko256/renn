@@ -10,26 +10,22 @@
 
 namespace renn::future::thunk {
 
-template <typename V>
-class [[nodiscard]] Ready : public role::ThunkBase<Ready<V>> {
-  public:
-    using ValueType = V;
+template <typename ValueType>
+class Ready final : public role::ThunkBase<Ready<V>> {
+  private:
+    ValueType value_;
 
-    explicit Ready(V v)
+  public:
+    explicit Ready(ValueType v)
         : value_(std::move(v)) {}
 
     Ready(Ready&&) = default;
     Ready& operator=(Ready&&) = default;
 
-    template <Continuation<V> Downstream>
+    template <Continuation<ValueType> Downstream>
     Computation auto materialize(Downstream cons) {
-        return comp::Immediate<V, Downstream>{
-            std::move(value_), std::move(cons)
-        };
+        return comp::Immediate<ValueType, Downstream>{std::move(value_), std::move(cons)};
     }
-
-  private:
-    ValueType value_;
 };
 
 

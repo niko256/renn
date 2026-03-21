@@ -1,16 +1,25 @@
 #pragma once
 
 #include "../Core/IExecutor.hpp"
-#include "../Timerrrs/TScheduler.hpp"
-#include "../Timerrrs/TimerQueue.hpp"
+#include "Time/ITimerService.hpp"
+#include "Time/TimerQueue.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
 
-namespace renn::timers {
+namespace renn::time {
 
-class TimerThread : public TScheduler {
+class TimerThread : public ITimerService {
+  private:
+    rt::IExecutor* executor_;
+    time::TimerQueue timers_;
+    std::thread thread_;
+
+    std::mutex mtx_;
+    std::condition_variable cv_;
+    std::atomic<bool> stopped_{false};
+
   public:
     explicit TimerThread(rt::IExecutor* executor);
 
@@ -21,15 +30,6 @@ class TimerThread : public TScheduler {
 
   private:
     void run_loop();
-
-  private:
-    rt::IExecutor* executor_;
-    IntrusiveTimerQueue timers_;
-    std::thread thread_;
-
-    std::mutex mtx_;
-    std::condition_variable cv_;
-    std::atomic<bool> stopped_{false};
 };
 
-}  // namespace renn::timers
+}  // namespace renn::time

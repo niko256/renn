@@ -1,10 +1,9 @@
 #include "TimerThread.hpp"
 
-namespace renn::timers {
+namespace renn::time {
 
 TimerThread::TimerThread(rt::IExecutor* executor)
-    : executor_(executor) {
-}
+    : executor_(executor) {}
 
 void TimerThread::set(Duration delay, TimerBase* timer) {
     {
@@ -16,9 +15,7 @@ void TimerThread::set(Duration delay, TimerBase* timer) {
 }
 
 void TimerThread::start() {
-    thread_ = std::thread([this] {
-        run_loop();
-    });
+    thread_ = std::thread([this] { run_loop(); });
 }
 
 void TimerThread::stop() {
@@ -39,4 +36,4 @@ void TimerThread::run_loop() {
      */
 }
 
-}  // namespace renn::timers
+}  // namespace renn::time
