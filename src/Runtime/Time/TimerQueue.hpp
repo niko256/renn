@@ -8,7 +8,6 @@
 
 namespace renn::time {
 
-// Sorted intrusive list of timers
 class TimerQueue {
   private:
     /* *---*---*---*---*---*---*---*---*---*---*---*---*---*---* */

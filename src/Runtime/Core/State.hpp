@@ -1,18 +1,20 @@
 #pragma once
 
-#include "View.hpp"
+#include "Core/IExecutor.hpp"
+#include "Time/IClock.hpp"
+#include "Time/ITimerService.hpp"
 
 namespace renn::rt {
 
+struct RennServices {
+    IExecutor* executor_ = nullptr;
+    time::ITimerService* timers_ = nullptr;
+    time::IClock* clock_ = nullptr;
+};
+
 struct State {
-    View runtime;
-
+    RennServices services_;
     /* ... */
-
-
-    inline auto rt() -> View {
-        return runtime;
-    }
 };
 
 }  // namespace renn::rt
