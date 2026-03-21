@@ -1,30 +1,37 @@
 #pragma once
 
 #include "../Continuation/Continuation.hpp"
-#include "../../Runtime/Core/Task.hpp"
-#include "../../Runtime/Core/State.hpp"
+#include "../../Infra/Core/Task.hpp"
+#include "Core/Env.hpp"
+#include "Core/Spawn.hpp"
 #include <algorithm>
 #include <optional>
 
 namespace renn::future::cont {
 
 template <typename In, typename Out, typename F, typename Downstream>
-struct Transform : role::ContinuationTag, public TaskBase {
+class Transform : role::ContinuationTag, public TaskBase {
+  private:
     using InputValue = In;
     using OutputValue = Out;
+
+    /* +---+---+---+---+---+---+---+ */
 
     F func_;
     Downstream downstream_;
     std::optional<In> input_;
-    rt::State state_;
+    rt::Env state_;
 
+    /* +---+---+---+---+---+---+---+ */
+
+  public:
     Transform(F f, Downstream d);
 
     /* Pinned */
     Transform(Transform&&) = default;
     Transform(const Transform&) = delete;
 
-    void proceed(In value, rt::State st);
+    void proceed(In value, rt::Env st);
 
     void run() noexcept override;
 };
@@ -37,11 +44,11 @@ Transform<In, Out, F, Downstream>::Transform(F f, Downstream d)
       state_{} {}
 
 template <typename In, typename Out, typename F, typename Downstream>
-void Transform<In, Out, F, Downstream>::proceed(In value, rt::State st) {
+void Transform<In, Out, F, Downstream>::proceed(In value, rt::Env st) {
     input_.emplace(std::move(value));
     state_ = st;
 
-    rt::submit(state_.runtime, this);
+    renn::submit(state_, this);
 }
 
 template <typename In, typename Out, typename F, typename Downstream>

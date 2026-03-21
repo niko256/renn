@@ -1,10 +1,21 @@
 #include "RunLoop.hpp"
+#include "Core/Env.hpp"
+#include "Core/IExecutor.hpp"
+#include "Core/State.hpp"
+#include "Time/ITimerService.hpp"
 #include <cstdlib>
 
 namespace renn::rt {
 
-RunLoop::operator View() {
-    return {this, this};
+auto RunLoop::env() -> Env {
+    IExecutor& exe = *this;
+    time::ITimerService& ts = *this;
+
+    return Env::from(exe, this);
+}
+
+RunLoop::operator Env() {
+    return env();
 }
 
 void RunLoop::submit(TaskBase* task) {
@@ -15,11 +26,11 @@ void RunLoop::submit(TaskBase* task) {
     condvar_.notify_one();
 }
 
-void RunLoop::set(timers::Duration delay, timers::TimerBase* timer) {
+void RunLoop::set(time::Duration delay, time::TimerBase* timer) {
     {
         std::lock_guard lock(mtx_);
         timer->deadline = std::chrono::steady_clock::now() + delay;
-        timers_.add(timer);
+        timers_.add_timer(delay, timer);
     }
     condvar_.notify_one();
 }

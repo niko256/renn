@@ -1,7 +1,5 @@
 #include "WaitGroup.hpp"
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
-
 namespace renn::sync {
 
 void WaitGroup::add(size_t count) {
@@ -22,9 +20,7 @@ void WaitGroup::done() {
 
 void WaitGroup::wait() {
     std::unique_lock<std::mutex> lock(mtx_);
-    all_done_.wait(lock, [this] {
-        return count_ == 0;
-    });
+    all_done_.wait(lock, [this] { return count_ == 0; });
 }
 
 };  // namespace renn::sync

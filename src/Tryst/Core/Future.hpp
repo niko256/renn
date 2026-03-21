@@ -18,6 +18,13 @@ namespace renn::tryst {
 
 template <typename T>
 class Future {
+  private:
+    /* +---+---+---+---+---+---+ */
+
+    SharedState<T>* state_;
+
+    /* +---+---+---+---+---+---+ */
+
   public:
     explicit Future(SharedState<T>*);
 
@@ -57,12 +64,9 @@ class Future {
      * @post this->valid() == false.
      */
     SharedState<T>* release_state();
-
-  private:
-    SharedState<T>* state_;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 
 template <typename T>

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../Runtime/Core/View.hpp"
 #include "../Computation/Computation.hpp"
 #include "../Continuation/Continuation.hpp"
 #include "../Core/Role.hpp"
@@ -11,7 +10,7 @@
 namespace renn::future::thunk {
 
 template <typename ValueType>
-class Ready final : public role::ThunkBase<Ready<V>> {
+class Ready final : public role::ThunkBase<Ready<ValueType>> {
   private:
     ValueType value_;
 

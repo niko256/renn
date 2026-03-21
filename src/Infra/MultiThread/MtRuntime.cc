@@ -1,10 +1,12 @@
 #include "MtRuntime.hpp"
+#include "Core/Env.hpp"
+#include "Core/State.hpp"
+#include "Infra/Time/ITimerService.hpp"
 
 namespace renn::rt {
 
 Runtime::Runtime(size_t num_workers)
-    : thread_pool_(num_workers) {
-}
+    : thread_pool_(num_workers) {}
 
 Runtime& Runtime::with_timers() {
     if (!timer_thread_.has_value()) {
@@ -29,8 +31,8 @@ void Runtime::stop() {
     thread_pool_.stop();
 }
 
-Runtime::operator View() {
-    timers::TScheduler* ts = nullptr;
+Runtime::operator Env() {
+    time::ITimerService* ts = nullptr;
 
     if (timer_thread_.has_value()) {
         ts = &(*timer_thread_);

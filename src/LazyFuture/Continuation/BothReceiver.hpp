@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../Core/Role.hpp"
 #include "Continuation.hpp"
-#include "../../Runtime/Core/State.hpp"
+#include "Core/Env.hpp"
 #include <optional>
 #include <atomic>
 #include <tuple>
@@ -13,14 +12,19 @@ namespace renn::future::cont {
 
 /* Waits for both to complete, then forwards pair to downstream */
 template <typename L, typename R, typename Downstream>
-struct BothReceiver {
+class BothReceiver {
+  private:
+    /* +---+---+---+---+---+---+---+---+---+ */
+
     using ResultType = std::tuple<L, R>;
 
     Downstream downstream_;
     std::optional<L> left_;
     std::optional<R> right_;
     std::atomic<int> count_{0};
-    rt::State state_;
+    rt::Env state_;
+
+    /* +---+---+---+---+---+---+---+---+---+ */
 
     BothReceiver(Downstream d)
         : downstream_(std::move(d)),
@@ -45,7 +49,7 @@ struct BothReceiver {
         LeftCont(BothReceiver* s)
             : self_(s) {}
 
-        void proceed(L value, rt::State state) {
+        void proceed(L value, rt::Env state) {
             self_->left_.emplace(std::move(value));
             self_->state_ = state;
             self_->count_.fetch_add(1);
@@ -59,7 +63,7 @@ struct BothReceiver {
         RightCont(BothReceiver* s)
             : self_(s) {}
 
-        void proceed(R value, rt::State state) {
+        void proceed(R value, rt::Env state) {
             self_->right_.emplace(std::move(value));
             self_->state_ = state;
             self_->count_.fetch_add(1);

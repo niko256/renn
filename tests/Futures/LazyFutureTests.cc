@@ -6,7 +6,7 @@
 #include "../../src/LazyFuture/FF/Ready.hpp"
 #include "../../src/LazyFuture/FF/Pure.hpp"
 #include "../../src/LazyFuture/FF/Via.hpp"
-#include "../../src/Runtime/Core/View.hpp"
+#include "../../src/Infra/Core/Env.hpp"
 #include "LazyFuture/FF/FlatMap.hpp"
 #include "LazyFuture/FF/Spawn.hpp"
 #include "ThreadPool/ThreadPool.hpp"
@@ -31,8 +31,7 @@ TEST_F(LFTest, ReadyStr) {
 }
 
 TEST_F(LFTest, MapSimple) {
-    auto f = future::Value(888)
-             | future::Map([](int input) { return input += (56 * 2); });
+    auto f = future::Value(888) | future::Map([](int input) { return input += (56 * 2); });
 
     int res = future::Get(std::move(f));
 
@@ -91,11 +90,10 @@ TEST_F(LFTest, SimpleVia) {
 }
 
 TEST_F(LFTest, FlatMapChain) {
-    auto f
-        = future::Ready(1)
-          | future::FlatMap([](int x) { return future::Value(x + 1); })   // 2
-          | future::FlatMap([](int x) { return future::Value(x * 18); })  // 36
-          | future::FlatMap([](int x) { return future::Value(x % 4); });  // 0
+    auto f = future::Ready(1)
+             | future::FlatMap([](int x) { return future::Value(x + 1); })   // 2
+             | future::FlatMap([](int x) { return future::Value(x * 18); })  // 36
+             | future::FlatMap([](int x) { return future::Value(x % 4); });  // 0
 
     auto res = future::Get(std::move(f));
     EXPECT_EQ(res, 0);
@@ -159,10 +157,9 @@ TEST_F(LFTest, BothWithSpawn) {
     exe::ThreadPool pool{4};
     pool.start();
 
-    auto f = future::Both(
-        future::Spawn(pool, [] { return 10; }),
-        future::Spawn(pool, [] { return 20; })
-    );
+    auto f = future::Both(future::Spawn(pool, [] { return 10; }), future::Spawn(pool, [] {
+                              return 20;
+                          }));
 
     auto [a, b] = future::Get(std::move(f));
     EXPECT_EQ(a, 10);

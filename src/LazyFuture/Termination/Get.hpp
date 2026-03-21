@@ -1,19 +1,22 @@
 #pragma once
 
-#include "../../Runtime/Core/Task.hpp"
-#include "../../Runtime/RunLoop/RunLoop.hpp"
+#include "Core/Task.hpp"
+#include "Infra/RunLoop/RunLoop.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
 #include "../Trait/ComputationOf.hpp"
 #include <cassert>
 #include <optional>
 #include "../Continuation/Demand.hpp"
+#include "Core/Spawn.hpp"
 
 namespace renn::future::thunk {
 
 template <Thunk T>
 class Receiver : public TaskBase {
   private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+
     using ValueType = trait::ValueOf<T>;
     using MyDemand = cont::Demand<ValueType, Receiver>;
     using Comp = trait::ComputationOf<T, MyDemand>;
@@ -23,6 +26,8 @@ class Receiver : public TaskBase {
     std::optional<Comp> comp_;
     std::optional<ValueType> result_;
     bool completed_{false};
+
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
   public:
     explicit Receiver(T th);
@@ -64,7 +69,7 @@ void Receiver<T>::set(ValueType v) {
 
 template <Thunk T>
 typename Receiver<T>::ValueType Receiver<T>::get() {
-    rt::submit(looop_, this);
+    renn::submit(looop_, this);
 
     /* spinning looooop */
     looop_.run();

@@ -1,25 +1,26 @@
 #pragma once
 
-#include "../../Runtime/Core/View.hpp"
+#include "../../Infra/Core/Env.hpp"
 #include "../Continuation/Continuation.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
 #include "../Continuation/MutateState.hpp"
+#include "LazyFuture/Core/Role.hpp"
 
 namespace renn::future::thunk {
 
 template <Thunk Upstream>
-class Via : public role::ThunkBase<Via<Upstream>> {
+class Via final : public role::ThunkBase<Via<Upstream>> {
   private:
     Upstream upstream_;
-    rt::View rt_;
+    rt::Env rt_;
 
   public:
     using ValueType = trait::ValueOf<Upstream>;
 
     Via(Via&&) = default;
 
-    Via(Upstream pr, rt::View runtime)
+    Via(Upstream pr, rt::Env runtime)
         : upstream_(std::move(pr)),
           rt_(runtime) {}
 

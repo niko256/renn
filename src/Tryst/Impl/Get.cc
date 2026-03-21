@@ -6,7 +6,7 @@
 namespace renn::tryst {
 
 template <typename T>
-T get(Future<T> f) {
+auto get(Future<T> f) -> T {
     std::optional<utils::Result<T>> res;
     sync::Event ready;
 

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../../Runtime/Core/State.hpp"
 #include "../Computation/Computation.hpp"
 #include <utility>
-#include "Role.hpp"
+#include "Core/Env.hpp"
 #include "../Continuation/Continuation.hpp"
 
 namespace renn::future::thunk {
@@ -12,12 +11,12 @@ namespace detail {
 
 template <typename V>
 struct ContinuationArchetype : role::ContinuationTag {
-    void proceed(V, rt::State){};
+    void proceed(V, rt::Env){};
 };
 
 }  // namespace detail
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 template <typename T>
 concept Thunk = requires {
@@ -31,6 +30,6 @@ concept Thunk = requires {
     } -> future::Computation;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 }  // namespace renn::future::thunk

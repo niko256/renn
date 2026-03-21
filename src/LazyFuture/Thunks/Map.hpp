@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../../Runtime/Core/Task.hpp"
+#include "../../Infra/Core/Task.hpp"
 #include "../Continuation/Continuation.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
 #include "../Continuation/Transform.hpp"
+#include "LazyFuture/Core/Role.hpp"
 #include <algorithm>
 #include <type_traits>
 
@@ -14,7 +15,10 @@ namespace renn::future::thunk {
  * | Future<T> -> (T -> U) -> Future<U> |
  */
 template <Thunk Upstream, typename F>
-struct Map final : public role::ThunkBase<Map<Upstream, F>> {
+class Map final : public role::ThunkBase<Map<Upstream, F>> {
+  private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+
     using InputType = trait::ValueOf<Upstream>;
     using OutputType = std::invoke_result_t<F, InputType>;
 
@@ -23,6 +27,9 @@ struct Map final : public role::ThunkBase<Map<Upstream, F>> {
     Upstream producer_;
     F procedure_;
 
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+
+  public:
     Map(Upstream pr, F user)
         : producer_(std::move(pr)),
           procedure_(std::move(user)) {}

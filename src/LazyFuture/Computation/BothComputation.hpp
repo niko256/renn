@@ -4,7 +4,7 @@
 #include "Computation.hpp"
 #include "../Continuation/BothReceiver.hpp"
 #include "../Trait/ComputationOf.hpp"
-#include "../../Runtime/Core/View.hpp"
+#include "../../Infra/Core/Env.hpp"
 #include <memory>
 
 namespace renn::future::comp {
@@ -33,7 +33,7 @@ class Both : role::ComputationBase<Both<LeftFuture, RightFuture, Downstream>> {
               std::move(right).materialize(typename Consumer::RightCont{consumer_.get()})
           ) {}
 
-    void start(rt::View rt) {
+    void start(rt::Env rt) {
         leftComp_.start(rt);
         rightComp_.start(rt);
     }

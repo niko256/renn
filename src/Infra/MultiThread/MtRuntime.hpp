@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Core/IExecutor.hpp"
-#include "../Core/View.hpp"
+#include "../Core/Env.hpp"
 #include "ThreadPool/ThreadPool.hpp"
 #include "TimerThread.hpp"
 #include <cstddef>
@@ -25,7 +25,7 @@ class Runtime {
     void start();
     void stop();
 
-    operator View();
+    operator Env();
 
     bool here() const;
 };
