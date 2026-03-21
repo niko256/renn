@@ -1,16 +1,23 @@
 #pragma once
 
 #include "../Core/IExecutor.hpp"
-#include "../Core/View.hpp"
-#include "../Timerrrs/TScheduler.hpp"
-#include "../Timerrrs/VClock.hpp"
+#include "../Time/TScheduler.hpp"
+#include "../Time/VClock.hpp"
+#include "Time/Time.hpp"
+#include "Time/TimerQueue.hpp"
+#include "Time/Vclock.hpp"
 #include "Timerrrs/TimerQueue.hpp"
 #include <cstddef>
 #include <ntrusive/intrusive.hpp>
 
 namespace renn::rt {
 
-class SandBox : public IExecutor, public timers::TScheduler {
+class SandBox : public IExecutor, public time::ITimerService {
+  private:
+    time::VirtualClock clock_;
+    IntrusiveList<TaskBase> tasks_;
+    time::TimerQueue timers_;
+
   public:
     SandBox() = default;
 
@@ -18,28 +25,22 @@ class SandBox : public IExecutor, public timers::TScheduler {
     SandBox(const SandBox&) = delete;
     SandBox& operator=(const SandBox&) = delete;
 
-    /* =*= View =*= */
-    operator View();
+    SandBox(SandBox&&) noexcept = delete;
+    SandBox& operator=(SandBox&&) noexcept = delete;
 
     void submit(TaskBase* task) override;
-
-    void set(timers::Duration delay, timers::TimerBase* timer) override;
+    void set(time::Duration delay, time::TimerBase* timer) override;
 
     size_t run_at_most_tasks(size_t limit);
-
     bool run_next_task();
-
     size_t run_tasks();
 
     size_t fire_ready_timers();
-
-    size_t advance_clock_by(timers::Duration delta);
-
+    size_t advance_clock_by(time::Duration delta);
     size_t advance_clock_to_next_dd();
 
     size_t run_to_completion();
-
-    size_t run_for(timers::Duration duration);
+    size_t run_for(time::Duration duration);
 
     bool has_tasks() const;
     bool has_timers() const;
@@ -51,12 +52,7 @@ class SandBox : public IExecutor, public timers::TScheduler {
     size_t task_count() const;
     size_t timer_count() const;
 
-    timers::Instant current_time() const;
-
-  private:
-    timers::VClock clock_;
-    IntrusiveList<TaskBase> tasks_;
-    timers::IntrusiveTimerQueue timers_;
+    auto current_time() const -> time::Timepoint;
 };
 
 }  // namespace renn::rt

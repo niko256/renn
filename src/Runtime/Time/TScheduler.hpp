@@ -8,12 +8,12 @@ namespace renn::time {
 /**
  * @brief Interface for scheduling delayed tasks.
  */
-class TScheduler {
+class ITimerService {
   public:
     virtual void set(Duration delay, TimerBase* timer) = 0;
 
   protected:
-    ~TScheduler() = default;
+    ~ITimerService() = default;
 };
 
 
