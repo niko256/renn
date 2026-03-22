@@ -1,9 +1,18 @@
-ADD_LIBRARY(WaitGroup STATIC
-  WaitGroup.cc
+ADD_LIBRARY(
+  WaitGroup
+    STATIC
+      WaitGroup.cc
 )
 
+TARGET_INCLUDE_DIRECTORIES(
+  WaitGroup
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+      $<INSTALL_INTERFACE:install/WaitGroup>
+)
 
-TARGET_INCLUDE_DIRECTORIES(WaitGroup PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:install/WaitGroup>
+TARGET_LINK_LIBRARIES(
+  WaitGroup
+    PUBLIC
+      Utils
 )

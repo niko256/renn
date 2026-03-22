@@ -9,9 +9,15 @@ namespace renn::future {
 namespace pipe {
 
 template <typename F>
-struct [[nodiscard]] MapCombinator {
+class MapCombinator {
+  private:
+    /* +---+---+---+ */
+
     F procedure_;
 
+    /* +---+---+---+ */
+
+  public:
     explicit MapCombinator(F user);
 
     MapCombinator(const MapCombinator&) = delete;
@@ -32,7 +38,7 @@ SomeFuture auto MapCombinator<F>::pipe(Input in) {
 
 }  // namespace pipe
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 template <typename F>
 auto Map(F proc) {

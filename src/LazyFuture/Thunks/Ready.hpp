@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../Runtime/Core/View.hpp"
 #include "../Computation/Computation.hpp"
 #include "../Continuation/Continuation.hpp"
 #include "../Core/Role.hpp"
@@ -11,25 +10,28 @@
 namespace renn::future::thunk {
 
 template <typename V>
-class [[nodiscard]] Ready : public role::ThunkBase<Ready<V>> {
+class Ready final : public role::ThunkBase<Ready<V>> {
+  private:
+    /* +---+---+ */
+
+    V value_;
+
+    /* +---+---+ */
   public:
     using ValueType = V;
 
-    explicit Ready(V v)
+    /* +---+---+---+---+ */
+
+    explicit Ready(ValueType v)
         : value_(std::move(v)) {}
 
     Ready(Ready&&) = default;
     Ready& operator=(Ready&&) = default;
 
-    template <Continuation<V> Downstream>
+    template <Continuation<ValueType> Downstream>
     Computation auto materialize(Downstream cons) {
-        return comp::Immediate<V, Downstream>{
-            std::move(value_), std::move(cons)
-        };
+        return comp::Immediate<ValueType, Downstream>{std::move(value_), std::move(cons)};
     }
-
-  private:
-    ValueType value_;
 };
 
 

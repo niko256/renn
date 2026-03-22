@@ -8,12 +8,18 @@
 namespace renn::future::thunk {
 
 template <Thunk Upstream>
-class [[nodiscard]] Flatten : public role::ThunkBase<Flatten<Upstream>> {
+class Flatten final : public role::ThunkBase<Flatten<Upstream>> {
+  private:
+    /* +---+---+---+---+ */
+
+    Upstream upstream_;
+
+    /* +---+---+---+---+ */
   public:
     using InnerFuture = trait::ValueOf<Upstream>;
     using ValueType = trait::ValueOf<InnerFuture>;
 
-    Upstream upstream_;
+    /* +---+---+---+---+---+---+---+---+---+---+---+ */
 
     Flatten(Upstream upstream)
         : upstream_(std::move(upstream)) {}

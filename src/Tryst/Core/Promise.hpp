@@ -12,6 +12,13 @@ namespace renn::tryst {
 
 template <typename T>
 class Promise {
+  private:
+    /* +---+---+---+---+---+---+ */
+
+    SharedState<T>* state_;
+
+    /* +---+---+---+---+---+---+ */
+
   public:
     explicit Promise(SharedState<T>* s);
 
@@ -36,19 +43,17 @@ class Promise {
     [[nodiscard]] SharedState<T>* satisfy_state();
 
     SharedState<T>* satisfied_state();
-
-
-  private:
-    SharedState<T>* state_;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 template <typename T>
-Promise<T>::Promise(SharedState<T>* s) : state_(s) {}
+Promise<T>::Promise(SharedState<T>* s)
+    : state_(s) {}
 
 template <typename T>
-Promise<T>::Promise(Promise&& other) noexcept : state_(other.release_state()) {}
+Promise<T>::Promise(Promise&& other) noexcept
+    : state_(other.release_state()) {}
 
 template <typename T>
 void Promise<T>::set(T value) {
@@ -62,7 +67,8 @@ void Promise<T>::set(T value) {
 template <typename T>
 Promise<T>::~Promise<T>() {
     if (has_state()) {
-        auto e_ptr = std::make_exception_ptr(std::future_error(std::future_errc::broken_promise));
+        auto e_ptr
+            = std::make_exception_ptr(std::future_error(std::future_errc::broken_promise));
 
         state_->produce(utils::Result<T>{std::unexpected(e_ptr)});
     }

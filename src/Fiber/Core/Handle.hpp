@@ -10,6 +10,13 @@ class Fiber;
 namespace renn {
 
 class FiberHandle {
+  private:
+    /* +---+---+---+---+---+---+---+ */
+
+    fiber::Fiber* fiber_ = nullptr;
+
+    /* +---+---+---+---+---+---+---+ */
+
   public:
     explicit FiberHandle(fiber::Fiber* fiber);
 
@@ -30,9 +37,6 @@ class FiberHandle {
     fiber::Fiber* release();
 
     void schedule();
-
-  private:
-    fiber::Fiber* fiber_ = nullptr;
 };
 
 };  // namespace renn

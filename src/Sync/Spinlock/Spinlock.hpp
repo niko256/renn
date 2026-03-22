@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Preamble.hpp"
-#include <atomic>
+#include "../../Utils/StdLike.hpp"
 #include <chrono>
 #include <cstdint>
 
@@ -9,11 +9,15 @@ namespace renn::sync {
 
 class Spinlock {
   private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+
     static constexpr size_t CACHE_LINE_SIZE = 64;
     static constexpr uint32_t SPIN_INITIAL_BACKOFF = 4;
     static constexpr uint32_t SPIN_MAX_BACKOFF = 1024;
 
-    alignas(CACHE_LINE_SIZE) std::atomic<bool> flag_{false};
+    alignas(CACHE_LINE_SIZE) stdlike::atomic<bool> flag_{false};
+
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
   public:
     Spinlock() = default;
@@ -36,7 +40,7 @@ class Spinlock {
     bool try_lock_until(const std::chrono::time_point<Clock, Duration>& abs_time) noexcept;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 
 template <typename Rep, typename Period>
@@ -66,7 +70,8 @@ bool Spinlock::try_lock_for(const ::std::chrono::duration<Rep, Period>& rel_time
                 return false;
             }
 
-            // If the lock becomes free => break early to attempt of acquiring the lock  in outer loop
+            // If the lock becomes free => break early to attempt of acquiring the lock  in
+            // outer loop
             if (!flag_.load()) {
                 break;
             }
@@ -86,8 +91,9 @@ bool Spinlock::try_lock_for(const ::std::chrono::duration<Rep, Period>& rel_time
 }
 
 template <typename Clock, typename Duration>
-bool Spinlock::try_lock_until(const ::std::chrono::time_point<Clock, Duration>& abs_time) noexcept {
-
+bool Spinlock::try_lock_until(
+    const ::std::chrono::time_point<Clock, Duration>& abs_time
+) noexcept {
     // First check if deadline already passed
     if (Clock::now() >= abs_time) {
         return false;

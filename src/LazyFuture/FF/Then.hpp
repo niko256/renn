@@ -9,9 +9,15 @@ namespace renn::future {
 namespace pipe {
 
 template <typename F>
-struct [[nodiscard]] ThenCombinator {
+class ThenCombinator {
+  private:
+    /* +---+---+ */
+
     F func_;
 
+    /* +---+---+ */
+
+  public:
     explicit ThenCombinator(F f)
         : func_(std::move(f)) {}
 

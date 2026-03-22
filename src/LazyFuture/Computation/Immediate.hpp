@@ -1,9 +1,7 @@
 #pragma once
 
 #include "../Core/Role.hpp"
-#include "../Continuation/Continuation.hpp"
-#include "../../Runtime/Core/View.hpp"
-#include "../../Runtime/Core/State.hpp"
+#include "../../Infra/Core/Env.hpp"
 
 namespace renn::future::comp {
 
@@ -11,11 +9,18 @@ namespace renn::future::comp {
  * @brief Materialized computation
  */
 template <typename V, typename Downstream>
-struct Immediate : role::ComputationBase<Immediate<V, Downstream>> {
-    using ValueType = V;
+class Immediate : public role::ComputationBase<Immediate<V, Downstream>> {
+  private:
+    /* +---+---+---+---+ */
 
     V value_;
     Downstream downstream_;
+
+    /* +---+---+---+---+ */
+
+  public:
+    using ValueType = V;
+
 
     Immediate(V v, Downstream d);
 
@@ -23,7 +28,7 @@ struct Immediate : role::ComputationBase<Immediate<V, Downstream>> {
 
     Immediate(const Immediate&) = delete;
 
-    void start(rt::View rt);
+    void start(rt::Env rt);
 };
 
 template <typename V, typename Downstream>
@@ -32,8 +37,8 @@ Immediate<V, Downstream>::Immediate(V v, Downstream d)
       downstream_(std::move(d)) {}
 
 template <typename V, typename Downstream>
-void Immediate<V, Downstream>::start(rt::View rt) {
-    downstream_.proceed(std::move(value_), rt::State{rt});
+void Immediate<V, Downstream>::start(rt::Env rt) {
+    downstream_.proceed(std::move(value_), rt::Env{rt});
 }
 
 }  // namespace renn::future::comp

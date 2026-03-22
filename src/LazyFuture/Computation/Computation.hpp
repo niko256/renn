@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Runtime/Core/View.hpp"
+#include "../../Infra/Core/Env.hpp"
 
 namespace renn::future {
 
@@ -12,7 +12,7 @@ namespace renn::future {
  */
 
 template <typename C>
-concept Computation = requires(C comp, rt::View rt) {
+concept Computation = requires(C comp, rt::Env rt) {
     { comp.start(rt) };
 };
 

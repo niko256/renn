@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Runtime/Core/IExecutor.hpp"
+#include "../../Infra/Core/IExecutor.hpp"
 #include "../../Utils/Routine.hpp"
 
 namespace renn::fiber {

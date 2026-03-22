@@ -12,14 +12,21 @@ namespace renn::future::thunk {
 
 /* Both — runs two futures in parallel, returns pair of results */
 template <Thunk Left, Thunk Right>
-class [[nodiscard]] Both : public role::ThunkBase<Both<Left, Right>> {
+class Both final : public role::ThunkBase<Both<Left, Right>> {
+  private:
+    /* +---+---+---+---+ */
+
+    Left left_;
+    Right right_;
+
+    /* +---+---+---+---+ */
+
   public:
     using LeftValue = trait::ValueOf<Left>;
     using RightValue = trait::ValueOf<Right>;
     using ValueType = std::tuple<LeftValue, RightValue>;
 
-    Left left_;
-    Right right_;
+    /* +---+---+---+---+ */
 
     Both(Left left, Right right)
         : left_(std::move(left)),

@@ -11,7 +11,7 @@ namespace renn::tryst {
 template <typename T>
 class SharedState {
   public:
-    void consume(renn::Callback<T> cb);
+    void consume(UnpackedCallback<T> cb);
 
     void produce(utils::Result<T> res);
 
@@ -28,7 +28,7 @@ class SharedState {
     std::optional<UnpackedCallback<T>> callback_;
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 template <typename T>
 void SharedState<T>::consume(UnpackedCallback<T> cb) {

@@ -2,12 +2,12 @@
 
 #include "../Core/Awaiter.hpp"
 #include "../Core/Handle.hpp"
-#include "../Runtime/Timerrrs/Time.hpp"
-#include "../Runtime/Timerrrs/TimerBase.hpp"
+#include "../Infra/Time/Time.hpp"
+#include "../Infra/Time/TimerBase.hpp"
 
 namespace renn::fiber {
 
-struct SleepAwaiter : IAwaiter, timers::TimerBase {
+struct SleepAwaiter : IAwaiter, time::TimerBase {
     FiberHandle f;
 
     void on_suspend(FiberHandle h) override;
@@ -15,6 +15,6 @@ struct SleepAwaiter : IAwaiter, timers::TimerBase {
     void run() noexcept override;
 };
 
-void sleep_for(timers::Duration delay);
+void sleep_for(time::Duration delay);
 
 };  // namespace renn::fiber

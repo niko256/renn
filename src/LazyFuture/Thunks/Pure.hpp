@@ -8,7 +8,7 @@
 
 namespace renn::future::thunk {
 
-struct [[nodiscard]] Pure : public role::ThunkBase<Pure> {
+struct Pure : public role::ThunkBase<Pure> {
     using ValueType = Unit;
 
     Pure() = default;
@@ -20,9 +20,7 @@ struct [[nodiscard]] Pure : public role::ThunkBase<Pure> {
 
     template <Continuation<ValueType> Downstream>
     Computation auto materialize(Downstream d) {
-        return comp::Immediate<typename Pure::ValueType, Downstream>{
-            unit, std::move(d)
-        };
+        return comp::Immediate<typename Pure::ValueType, Downstream>{unit, std::move(d)};
     }
 };
 

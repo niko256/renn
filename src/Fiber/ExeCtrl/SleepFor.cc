@@ -18,7 +18,7 @@ void SleepAwaiter::run() noexcept {
     f.schedule();
 }
 
-void sleep_for(timers::Duration delay) {
+void sleep_for(time::Duration delay) {
     Fiber* f_curr = Fiber::current();
 
     RENN_ASSERT(f_curr != nullptr, "Current fiber is invalid...");

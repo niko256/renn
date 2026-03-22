@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Runtime/Core/IExecutor.hpp"
-#include "../../Runtime/Core/Task.hpp"
+#include "../../Infra/Core/IExecutor.hpp"
+#include "../../Infra/Core/Task.hpp"
 #include "../Coroutine/Coro.hpp"
 #include "../Utils/Routine.hpp"
 #include "Awaiter.hpp"
@@ -15,6 +15,16 @@ using SuspendHandler = fu2::unique_function<void(FiberHandle)>;
 /*** Fiber = Stackful coroutine x Scheduler ***/
 
 class Fiber : public TaskBase {
+  private:
+    /* +---+---+---+---+---+---+---+---+ */
+
+    renn::Coroutine coro_;
+    rt::IExecutor& sched_;
+    IAwaiter* awaiter_{};
+    static thread_local Fiber* current_;
+
+    /* +---+---+---+---+---+---+---+---+ */
+
   public:
     explicit Fiber(rt::IExecutor&, utils::Routine);
 
@@ -31,12 +41,6 @@ class Fiber : public TaskBase {
 
   private:
     void step();
-
-  private:
-    renn::Coroutine coro_;
-    rt::IExecutor& sched_;
-    IAwaiter* awaiter_{};
-    static thread_local Fiber* current_;
 };
 
 };  // namespace renn::fiber

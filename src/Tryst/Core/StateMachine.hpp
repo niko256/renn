@@ -1,6 +1,6 @@
 #pragma once
 
-#include <atomic>
+#include "../../Utils/StdLike.hpp"
 #include <cstdint>
 
 namespace renn::tryst {
@@ -31,16 +31,20 @@ enum States : uint64_t {
  * [Symmetric] : Producer and consumer has identical arrival logic.
  */
 class StateMachine {
+  private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+ */
+
+    stdlike::atomic<uint64_t> state_{States::INIT};
+
+    /* +---+---+---+---+---+---+---+---+---+---+---+ */
+
   public:
     bool consume();
 
     bool produce();
-
-  private:
-    std::atomic<uint64_t> state_{States::INIT};
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 /*
  * fetch_or do atomic rmw:

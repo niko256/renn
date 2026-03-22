@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Runtime/Core/View.hpp"
+#include "../../Infra/Core/Env.hpp"
 #include "../Core/Future.hpp"
 #include "../Thunks/Via.hpp"
 
@@ -8,10 +8,16 @@ namespace renn::future {
 
 namespace pipe {
 
-struct [[nodiscard]] ViaCombinator {
-    rt::View runtime_;
+class ViaCombinator {
+  private:
+    /* +---+---+---+ */
 
-    explicit ViaCombinator(rt::View rt);
+    rt::Env state_;
+
+    /* +---+---+---+ */
+
+  public:
+    explicit ViaCombinator(rt::Env rt);
 
     ViaCombinator(const ViaCombinator&) = delete;
 
@@ -19,19 +25,19 @@ struct [[nodiscard]] ViaCombinator {
     SomeFuture auto pipe(Input in);
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+ */
 
-ViaCombinator::ViaCombinator(rt::View rt)
-    : runtime_(rt) {}
+ViaCombinator::ViaCombinator(rt::Env rt)
+    : state_(rt) {}
 
 template <SomeFuture Input>
 SomeFuture auto ViaCombinator::pipe(Input in) {
-    return thunk::Via{std::move(in), runtime_};
+    return thunk::Via{std::move(in), state_};
 }
 
 }  // namespace pipe
 
-inline auto Via(rt::View runtime) {
+inline auto Via(rt::Env runtime) {
     return pipe::ViaCombinator{runtime};
 }
 

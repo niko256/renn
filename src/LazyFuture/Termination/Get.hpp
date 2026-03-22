@@ -1,21 +1,35 @@
 #pragma once
 
-#include "../../Runtime/Core/Task.hpp" 
-#include "../../Runtime/RunLoop/RunLoop.hpp"
+#include "../Infra/Core/Task.hpp"
+#include "Infra/RunLoop/RunLoop.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"
 #include "../Trait/ComputationOf.hpp"
 #include <cassert>
 #include <optional>
 #include "../Continuation/Demand.hpp"
+#include "Core/Spawn.hpp"
 
 namespace renn::future::thunk {
 
 template <Thunk T>
-class [[nodiscard]] Receiver : public TaskBase {
-  public:
-    using ValueType = trait::ValueOf<T>;
+class Receiver : public TaskBase {
+  private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
+    using ValueType = trait::ValueOf<T>;
+    using MyDemand = cont::Demand<ValueType, Receiver>;
+    using Comp = trait::ComputationOf<T, MyDemand>;
+
+    T thunk_;
+    rt::RunLoop looop_;
+    std::optional<Comp> comp_;
+    std::optional<ValueType> result_;
+    bool completed_{false};
+
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+
+  public:
     explicit Receiver(T th);
 
     Receiver(const Receiver&) = delete;
@@ -26,19 +40,9 @@ class [[nodiscard]] Receiver : public TaskBase {
     void run() noexcept override;
 
     void set(ValueType v);
-
-  private:
-    using MyDemand = cont::Demand<ValueType, Receiver>;
-    using Comp = trait::ComputationOf<T, MyDemand>;
-
-    T thunk_;
-    rt::RunLoop looop_;
-    std::optional<Comp> comp_;
-    std::optional<ValueType> result_;
-    bool completed_{false};
 };
 
-/* |-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-| */
+/* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
 template <thunk::Thunk T>
 Receiver<T>::Receiver(T thunk)
@@ -65,7 +69,7 @@ void Receiver<T>::set(ValueType v) {
 
 template <Thunk T>
 typename Receiver<T>::ValueType Receiver<T>::get() {
-    rt::submit(looop_, this);
+    renn::submit(looop_, this);
 
     /* spinning looooop */
     looop_.run();

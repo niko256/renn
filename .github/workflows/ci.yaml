@@ -11,13 +11,15 @@ on: # trigger
 
 jobs:
   build_and_test: # job (sequence of 'steps')
-    name: Build & Test on Ubuntu with GCC
+    name: Build & Test on Ubuntu with Clang
     runs-on: ubuntu-latest
 
     steps:
       # Step 1 : Clone the repo
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       # Step 2 : Toolchain setup
       - name: Set up C++ toolchain (Clang)
@@ -31,12 +33,14 @@ jobs:
         run: |
           CXX=clang++ cmake -B ${{github.workspace}}/build \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_STANDARD=20
+            -DCMAKE_CXX_STANDARD=20 \
+            -DRENN_BUILD_UNIT_TESTS=ON \
+            -DRENN_WITH_TWIST=ON
 
       # Step 4 : Build project
       - name: Build
         # -j$(nproc) starts execution of building in parallel with available count of cpu cores
-        run: cmake --build ${{github.workspace}}/build -j$(nproc)
+        run: cmake --build ${{github.workspace}}/build -j$(nproc) --parallel
 
       # Step 5 : Run Ctest
       - name: Run tests
