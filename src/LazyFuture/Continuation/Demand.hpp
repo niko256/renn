@@ -6,10 +6,15 @@
 namespace renn::future::cont {
 
 template <typename V, typename Receiver>
-struct Demand : role::ContinuationTag {
-    using ValueType = V;
+class Demand : public role::ContinuationTag {
+  private:
+    /* +---+---+---+---+ */
 
     Receiver* receiver_;
+
+    /* +---+---+---+---+ */
+  public:
+    using ValueType = V;
 
     explicit Demand(Receiver* r);
 

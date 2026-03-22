@@ -16,8 +16,6 @@ class BothReceiver {
   private:
     /* +---+---+---+---+---+---+---+---+---+ */
 
-    using ResultType = std::tuple<L, R>;
-
     Downstream downstream_;
     std::optional<L> left_;
     std::optional<R> right_;
@@ -25,6 +23,9 @@ class BothReceiver {
     rt::Env state_;
 
     /* +---+---+---+---+---+---+---+---+---+ */
+
+  public:
+    using ResultType = std::tuple<L, R>;
 
     BothReceiver(Downstream d)
         : downstream_(std::move(d)),

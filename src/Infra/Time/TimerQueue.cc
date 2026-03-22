@@ -21,14 +21,14 @@ auto TimerQueue::next_deadline() const -> std::optional<time::Timepoint> {
     return timers_.begin()->first;
 }
 
-auto TimerQueue::extract_expired(Timepoint now) -> IntrusiveList<time::TimerBase*> {
-    IntrusiveList<time::TimerBase*> ready;
+auto TimerQueue::extract_expired(Timepoint now) -> IntrusiveList<TimerBase> {
+    IntrusiveList<TimerBase> ready;
 
     while (not timers_.empty()) {
         auto timer = timers_.begin();
 
         if (timer->first <= now) {
-            ready.push_back(timer->second);
+            ready.push_back(*timer->second);
             timers_.erase(timer);
         } else {
             break;

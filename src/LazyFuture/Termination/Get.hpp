@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Task.hpp"
+#include "../Infra/Core/Task.hpp"
 #include "Infra/RunLoop/RunLoop.hpp"
 #include "../Core/Thunk.hpp"
 #include "../Trait/ValueOf.hpp"

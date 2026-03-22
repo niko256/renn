@@ -3,6 +3,7 @@
 #include <concepts>
 #include <optional>
 #include <tuple>
+#include "../../Utils/Assert.hpp"
 
 namespace renn::rt {
 
@@ -24,7 +25,7 @@ class State {
      * and returns true if T matches any type in the Services pack.
      */
     template <typename T>
-    static constexpr bool is_known = (std::same_as<T, Services> || ...);
+    static constexpr bool is_known = (std::derived_from<T, Services> || ...);
 
     constexpr State()
         : slots_(static_cast<Services*>(nullptr)...) {}
@@ -38,6 +39,20 @@ class State {
     static auto from(Ts&... services) -> State {
         State s;
         ((std::get<Ts*>(s.slots_) = &services), ...);
+
+        return s;
+    }
+
+    /**
+     * @tparam Targets The base types (from the Services pack) to assign.
+     * @tparam Actuals The actual derived types of the passed service instances.
+     */
+    template <typename... Targets, typename... Actuals>
+        requires(sizeof...(Targets) == sizeof...(Actuals)) and ((is_known<Targets>) and ...)
+                and ((std::derived_from<Actuals, Targets>) and ...)
+    static auto from(Actuals&... services) -> State {
+        State s;
+        ((std::get<Targets*>(s.slots_) = &services), ...);
 
         return s;
     }

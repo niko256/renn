@@ -9,12 +9,19 @@
 
 namespace renn::future::thunk {
 
-template <typename ValueType>
-class Ready final : public role::ThunkBase<Ready<ValueType>> {
+template <typename V>
+class Ready final : public role::ThunkBase<Ready<V>> {
   private:
-    ValueType value_;
+    /* +---+---+ */
 
+    V value_;
+
+    /* +---+---+ */
   public:
+    using ValueType = V;
+
+    /* +---+---+---+---+ */
+
     explicit Ready(ValueType v)
         : value_(std::move(v)) {}
 

@@ -11,8 +11,13 @@ namespace renn::rt {
 
 class Runtime {
   private:
+    /* +---+---+---+---+---+---+---+---+---+---+---+ */
+
     exe::ThreadPool thread_pool_;
+
     std::optional<time::TimerThread> timer_thread_;
+
+    /* +---+---+---+---+---+---+---+---+---+---+---+ */
 
   public:
     explicit Runtime(size_t num_workers);

@@ -14,13 +14,18 @@ namespace renn::future::thunk {
 template <Thunk Upstream, typename F>
 class FlatMap final : public role::ThunkBase<FlatMap<Upstream, F>> {
   private:
+    /* +---+---+---+---+ */
+
     Upstream upstream_;
     F func_;
 
+    /* +---+---+---+---+ */
   public:
     using InputType = trait::ValueOf<Upstream>;
     using InnerFuture = std::invoke_result_t<F, InputType>;
     using ValueType = trait::ValueOf<InnerFuture>;
+
+    /* +---+---+---+---+ */
 
     FlatMap(Upstream upstream, F func)
         : upstream_(std::move(upstream)),

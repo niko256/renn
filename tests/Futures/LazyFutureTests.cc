@@ -7,6 +7,7 @@
 #include "../../src/LazyFuture/FF/Pure.hpp"
 #include "../../src/LazyFuture/FF/Via.hpp"
 #include "../../src/Infra/Core/Env.hpp"
+#include "Core/IExecutor.hpp"
 #include "LazyFuture/FF/FlatMap.hpp"
 #include "LazyFuture/FF/Spawn.hpp"
 #include "ThreadPool/ThreadPool.hpp"
@@ -79,7 +80,7 @@ TEST_F(LFTest, SimpleVia) {
     exe::ThreadPool pool{4};
     pool.start();
 
-    auto f = future::Pure() | future::Via(rt::make_view(pool))
+    auto f = future::Pure() | future::Via(rt::Env::from<rt::IExecutor>(pool))
              | future::Map([](future::Unit) { return 88; });
 
     int res = future::Get(std::move(f));

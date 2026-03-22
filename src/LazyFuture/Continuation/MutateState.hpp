@@ -6,11 +6,18 @@
 namespace renn::future::cont {
 
 template <typename V, typename Downstream>
-struct MutateState : role::ContinuationTag {
-    using ValueType = V;
+class MutateState : public role::ContinuationTag {
+  private:
+    /* +---+---+---+---+ */
 
     rt::Env target_;
     Downstream downstream_;
+
+    /* +---+---+---+---+ */
+
+  public:
+    using ValueType = V;
+
 
     MutateState(rt::Env rt, Downstream d);
 

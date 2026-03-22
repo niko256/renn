@@ -3,6 +3,7 @@
 #include "../Core/IExecutor.hpp"
 #include "../Time/ITimerService.hpp"
 #include "../Time/VClock.hpp"
+#include "Core/Env.hpp"
 #include "Time/Time.hpp"
 #include "Time/TimerQueue.hpp"
 #include <cstddef>
@@ -17,9 +18,13 @@ namespace renn::rt {
  */
 class SandBox : public IExecutor, public time::ITimerService {
   private:
+    /* +---+---+---+---+---+---+---+ */
+
     time::VirtualClock clock_;
     IntrusiveList<TaskBase> tasks_;
     time::TimerQueue timers_;
+
+    /* +---+---+---+---+---+---+---+ */
 
   public:
     SandBox() = default;
@@ -33,6 +38,9 @@ class SandBox : public IExecutor, public time::ITimerService {
 
     void submit(TaskBase* task) override;
     void set(time::Duration delay, time::TimerBase* timer) override;
+
+    auto env() -> Env;
+    operator Env();
 
     size_t run_at_most_tasks(size_t limit);
     bool run_next_task();

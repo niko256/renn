@@ -9,11 +9,18 @@ namespace renn::future::comp {
  * @brief Materialized computation
  */
 template <typename V, typename Downstream>
-struct Immediate : role::ComputationBase<Immediate<V, Downstream>> {
-    using ValueType = V;
+class Immediate : public role::ComputationBase<Immediate<V, Downstream>> {
+  private:
+    /* +---+---+---+---+ */
 
     V value_;
     Downstream downstream_;
+
+    /* +---+---+---+---+ */
+
+  public:
+    using ValueType = V;
+
 
     Immediate(V v, Downstream d);
 

@@ -12,6 +12,8 @@ namespace renn::time {
 
 class TimerThread : public ITimerService {
   private:
+    /* +---+---+---+---+---+---+---+---+---+ */
+
     rt::IExecutor* executor_;
     time::TimerQueue timers_;
     std::thread thread_;
@@ -19,6 +21,8 @@ class TimerThread : public ITimerService {
     std::mutex mtx_;
     std::condition_variable cv_;
     std::atomic<bool> stopped_{false};
+
+    /* +---+---+---+---+---+---+---+---+---+ */
 
   public:
     explicit TimerThread(rt::IExecutor* executor);

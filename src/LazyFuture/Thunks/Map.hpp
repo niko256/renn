@@ -17,15 +17,18 @@ namespace renn::future::thunk {
 template <Thunk Upstream, typename F>
 class Map final : public role::ThunkBase<Map<Upstream, F>> {
   private:
-    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
+    /* +---+---+---+---+ */
 
+    Upstream producer_;
+    F procedure_;
+
+    /* +---+---+---+---+ */
+
+  public:
     using InputType = trait::ValueOf<Upstream>;
     using OutputType = std::invoke_result_t<F, InputType>;
 
     using ValueType = OutputType;
-
-    Upstream producer_;
-    F procedure_;
 
     /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 

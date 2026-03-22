@@ -3,7 +3,6 @@
 #include "Continuation.hpp"
 #include "../Trait/ValueOf.hpp"
 #include "../Trait/ComputationOf.hpp"
-#include "Core/Env.hpp"
 #include <optional>
 
 namespace renn::future::cont {
@@ -41,7 +40,7 @@ class Unwrap : public role::ContinuationTag {
     void proceed(InnerFuture inner, rt::Env state) {
         inner_comp_.emplace(std::move(inner).materialize(Bridge{this}));
 
-        inner_comp_->start(state.rt());
+        inner_comp_->start(state);
     }
 };
 

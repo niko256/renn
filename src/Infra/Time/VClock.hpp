@@ -1,20 +1,19 @@
 #pragma once
 
-#include "Time/IClock.hpp"
 #include "Time/Time.hpp"
-#include "../../Utils/Assert.hpp"
+#include "Utils/Assert.hpp"
 
 namespace renn::time {
 
 
-class VirtualClock final : public IClock {
+class VirtualClock final {
   private:
     time::Timepoint now_{};
 
   public:
     VirtualClock() = default;
 
-    time::Timepoint now() const override {
+    time::Timepoint now() const {
         return now_;
     }
 

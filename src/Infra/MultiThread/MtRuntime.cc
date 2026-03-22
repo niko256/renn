@@ -1,5 +1,6 @@
 #include "MtRuntime.hpp"
 #include "Core/Env.hpp"
+#include "Core/IExecutor.hpp"
 #include "Core/State.hpp"
 #include "Infra/Time/ITimerService.hpp"
 
@@ -32,13 +33,13 @@ void Runtime::stop() {
 }
 
 Runtime::operator Env() {
-    time::ITimerService* ts = nullptr;
+    auto e = Env::from<IExecutor>(thread_pool_);
 
     if (timer_thread_.has_value()) {
-        ts = &(*timer_thread_);
+        e = e.with<time::ITimerService>(*timer_thread_);
     }
 
-    return {&thread_pool_, ts};
+    return e;
 }
 
 bool Runtime::here() const {

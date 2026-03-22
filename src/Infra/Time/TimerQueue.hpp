@@ -10,11 +10,11 @@ namespace renn::time {
 
 class TimerQueue {
   private:
-    /* *---*---*---*---*---*---*---*---*---*---*---*---*---*---* */
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
     std::multimap<time::Timepoint, time::TimerBase*> timers_;
 
-    /* *---*---*---*---*---*---*---*---*---*---*---*---*---*---* */
+    /* +---+---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 
   public:
     void add_timer(Timepoint deadline, TimerBase* timer);
@@ -26,7 +26,7 @@ class TimerQueue {
     /*
      * @brief Extract all timers with deadline <= now()
      */
-    auto extract_expired(Timepoint now) -> IntrusiveList<time::TimerBase*>;
+    auto extract_expired(Timepoint now) -> IntrusiveList<time::TimerBase>;
 };
 
 }  // namespace renn::time

@@ -10,17 +10,20 @@
 namespace renn::future::cont {
 
 template <typename In, typename Out, typename F, typename Downstream>
-class Transform : role::ContinuationTag, public TaskBase {
+class Transform : public role::ContinuationTag, public TaskBase {
   private:
-    using InputValue = In;
-    using OutputValue = Out;
-
-    /* +---+---+---+---+---+---+---+ */
+    /* +---+---+---+---+---+ */
 
     F func_;
     Downstream downstream_;
     std::optional<In> input_;
     rt::Env state_;
+
+    /* +---+---+---+---+---+ */
+
+  public:
+    using InputValue = In;
+    using OutputValue = Out;
 
     /* +---+---+---+---+---+---+---+ */
 

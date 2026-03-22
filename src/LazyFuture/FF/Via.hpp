@@ -10,7 +10,11 @@ namespace pipe {
 
 class ViaCombinator {
   private:
+    /* +---+---+---+ */
+
     rt::Env state_;
+
+    /* +---+---+---+ */
 
   public:
     explicit ViaCombinator(rt::Env rt);

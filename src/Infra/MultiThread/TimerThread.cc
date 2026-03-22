@@ -1,4 +1,5 @@
 #include "TimerThread.hpp"
+#include "Time/Time.hpp"
 
 namespace renn::time {
 
@@ -8,8 +9,10 @@ TimerThread::TimerThread(rt::IExecutor* executor)
 void TimerThread::set(Duration delay, TimerBase* timer) {
     {
         std::lock_guard lock(mtx_);
-        timer->deadline = SystemClock::now() + delay;
-        timers_.add(timer);
+        auto point = SystemClock::now() + delay;
+
+        timer->deadline = point;
+        timers_.add_timer(point, timer);
     }
     cv_.notify_one();
 }

@@ -12,11 +12,17 @@ namespace renn::future::thunk {
 template <Thunk Upstream>
 class Via final : public role::ThunkBase<Via<Upstream>> {
   private:
+    /* +---+---+---+---+ */
+
     Upstream upstream_;
     rt::Env rt_;
 
+    /* +---+---+---+---+ */
+
   public:
     using ValueType = trait::ValueOf<Upstream>;
+
+    /* +---+---+---+---+---+---+---+---+---+---+ */
 
     Via(Via&&) = default;
 
