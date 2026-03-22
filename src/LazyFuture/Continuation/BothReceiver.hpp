@@ -3,7 +3,7 @@
 #include "Continuation.hpp"
 #include "Core/Env.hpp"
 #include <optional>
-#include <atomic>
+#include "../../Utils/StdLike.hpp"
 #include <tuple>
 
 namespace renn::future::cont {
@@ -19,7 +19,7 @@ class BothReceiver {
     Downstream downstream_;
     std::optional<L> left_;
     std::optional<R> right_;
-    std::atomic<int> count_{0};
+    stdlike::atomic<int> count_{0};
     rt::Env state_;
 
     /* +---+---+---+---+---+---+---+---+---+ */

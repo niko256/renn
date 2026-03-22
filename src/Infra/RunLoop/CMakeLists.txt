@@ -8,6 +8,7 @@ TARGET_INCLUDE_DIRECTORIES(RtRunLoop PUBLIC
 
 TARGET_LINK_LIBRARIES(RtRunLoop PUBLIC
   RtCore
+  Utils
   RtTimers
   third_party_ntrusive
 )

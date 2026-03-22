@@ -5,4 +5,5 @@ ADD_LIBRARY(RtExe INTERFACE)
 
 TARGET_LINK_LIBRARIES(RtExe INTERFACE
     ThreadPool
+    Utils
 )

@@ -1,8 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <condition_variable>
-#include <mutex>
+#include "../../Utils/StdLike.hpp"
 #include <ntrusive/intrusive.hpp>
 
 namespace renn::exe {
@@ -32,8 +31,8 @@ class UnboundedBlockingQueue {
 
   private:
     IntrusiveList<T> task_queue_;
-    mutable std::mutex mtx_;
-    std::condition_variable cv_;
+    mutable stdlike::mutex mtx_;
+    stdlike::condition_variable cv_;
     bool is_closed_{false};
 };
 
@@ -45,7 +44,7 @@ void UnboundedBlockingQueue<T>::push(T* item) {
     if (is_closed_)
         return;
     {
-        std::unique_lock<std::mutex> lock(mtx_);
+        std::unique_lock<stdlike::mutex> lock(mtx_);
 
         task_queue_.push_back(*item);
     }
@@ -56,7 +55,7 @@ void UnboundedBlockingQueue<T>::push(T* item) {
 
 template <typename T>
 T* UnboundedBlockingQueue<T>::pop() {
-    std::unique_lock<std::mutex> lock(mtx_);
+    std::unique_lock<stdlike::mutex> lock(mtx_);
 
     // Waits until queue is not empty OR it has been closed and no more items
     // will be ever produced
@@ -74,7 +73,7 @@ T* UnboundedBlockingQueue<T>::pop() {
 template <typename T>
 void UnboundedBlockingQueue<T>::close() {
     {
-        std::lock_guard<std::mutex> lock(mtx_);
+        std::lock_guard<stdlike::mutex> lock(mtx_);
 
         is_closed_ = true;
     }

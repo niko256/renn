@@ -1,11 +1,11 @@
-#include "../../src/Infra/Core/Spawn.hpp"
+#include "../../../src/Infra/Core/Spawn.hpp"
 #include "../../src/Infra/Executors/ThreadPool/ThreadPool.hpp"
 #include "../../src/Sync/WaitGroup/WaitGroup.hpp"
 #include <atomic>
 #include <future>
 #include <gtest/gtest.h>
 #include <memory>
-#include <mutex>
+#include "../../Utils/StdLike.hpp"
 #include <set>
 #include <thread>
 
@@ -19,7 +19,7 @@ TEST(WaitGroupTest, ConcurrentDone) {
     WaitGroup wg;
     const size_t renn_count = 1000;
     std::vector<std::thread> threads;
-    std::atomic<int> cnt;
+    stdlike::atomic<int> cnt;
 
     wg.add(renn_count);
 
@@ -41,7 +41,7 @@ TEST(WaitGroupTest, ConcurrentDone) {
 
 TEST(WaitGroupTest, BlocksUntilDone) {
     WaitGroup wg;
-    std::atomic<bool> renn_done = false;
+    stdlike::atomic<bool> renn_done = false;
 
     wg.add(1);
 
@@ -75,9 +75,7 @@ TEST_F(ThreadPoolTests, ExecutesOneRenn) {
     std::promise<void> pr;
     auto future = pr.get_future();
 
-    spawn(*pool_, [&] {
-        pr.set_value();
-    });
+    spawn(*pool_, [&] { pr.set_value(); });
 
     auto status = future.wait_for(1s);
     ASSERT_EQ(status, std::future_status::ready);
@@ -86,7 +84,7 @@ TEST_F(ThreadPoolTests, ExecutesOneRenn) {
 TEST_F(ThreadPoolTests, ExecuteManyRenns) {
     const size_t renn_count = 10000;
     WaitGroup wg;
-    std::atomic<size_t> renns_executed{0};
+    stdlike::atomic<size_t> renns_executed{0};
 
     wg.add(renn_count);
     for (size_t i = 0; i < renn_count; ++i) {
@@ -104,7 +102,7 @@ TEST_F(ThreadPoolTests, ExecuteManyRenns) {
 TEST_F(ThreadPoolTests, rennsOnDifferentThreads) {
     const size_t renn_count = 5000;
     WaitGroup wg;
-    std::mutex threads_ids_mutex;
+    stdlike::mutex threads_ids_mutex;
     std::set<std::thread::id> threads_ids;
 
     wg.add(renn_count);
@@ -136,9 +134,7 @@ TEST_F(ThreadPoolTests, CurrentMethod) {
     std::promise<exe::ThreadPool*> p;
     auto f = p.get_future();
 
-    spawn(*pool_, [&p, this] {
-        p.set_value(exe::ThreadPool::current());
-    });
+    spawn(*pool_, [&p, this] { p.set_value(exe::ThreadPool::current()); });
 
     exe::ThreadPool* current_pool_ptr = f.get();
 
@@ -152,9 +148,7 @@ TEST_F(ThreadPoolTests, ZeroThreadsPool) {
     std::promise<void> p;
     auto f = p.get_future();
 
-    spawn(*pool_, [&] {
-        p.set_value();
-    });
+    spawn(*pool_, [&] { p.set_value(); });
 
     auto status = f.wait_for(1s);
     ASSERT_EQ(status, std::future_status::ready);

@@ -9,6 +9,7 @@ TARGET_INCLUDE_DIRECTORIES(RtMultiThread PUBLIC
 
 TARGET_LINK_LIBRARIES(RtMultiThread PUBLIC
   RtCore
+  Utils
   RtTimers
   RtExe
 )

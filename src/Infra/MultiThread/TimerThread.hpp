@@ -3,10 +3,7 @@
 #include "../Core/IExecutor.hpp"
 #include "Time/ITimerService.hpp"
 #include "Time/TimerQueue.hpp"
-#include <atomic>
-#include <condition_variable>
-#include <mutex>
-#include <thread>
+#include "../Utils/StdLike.hpp"
 
 namespace renn::time {
 
@@ -16,11 +13,11 @@ class TimerThread : public ITimerService {
 
     rt::IExecutor* executor_;
     time::TimerQueue timers_;
-    std::thread thread_;
+    stdlike::thread thread_;
 
-    std::mutex mtx_;
-    std::condition_variable cv_;
-    std::atomic<bool> stopped_{false};
+    stdlike::mutex mtx_;
+    stdlike::condition_variable cv_;
+    stdlike::atomic<bool> stopped_{false};
 
     /* +---+---+---+---+---+---+---+---+---+ */
 

@@ -1,14 +1,13 @@
-#include "../../src/Sync/Spinlock/Spinlock.hpp"
+#include "../../../src/Sync/Spinlock/Spinlock.hpp"
 #include "gtest/gtest.h"
-#include <atomic>
 #include <chrono>
 #include <future>
-#include <mutex>
-#include <thread>
+#include "../../Utils/StdLike.hpp"
 #include <vector>
 
+using namespace renn;
 
-using Spinlock = renn::sync::Spinlock;
+using Spinlock = sync::Spinlock;
 
 class SpinlockBasicTest : public ::testing::Test {
   protected:
@@ -34,10 +33,9 @@ TEST_F(SpinlockBasicTest, DoubleLockFails) {
 }
 
 class SpinlockConcurrencyTests : public ::testing::Test {
-
   protected:
     Spinlock lock_;
-    std::atomic<int> counter_{0};
+    stdlike::atomic<int> counter_{0};
 
     const int num_threads = std::thread::hardware_concurrency();
     const int operations_per_thread = 10000;
@@ -148,7 +146,6 @@ TEST_F(SpinlockTimeoutTest, TryLockForSuccess) {
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     lock_.unlock();
 
-    // VERIFY: Background thread should have acquired lock
     EXPECT_TRUE(future.get());
 }
 
@@ -235,7 +232,7 @@ TEST_F(SpinlockPerfTest, LowOverhead) {
 TEST_F(SpinlockPerfTest, HighContention) {
     const int num_threads = std::thread::hardware_concurrency();
     const int operations_per_thread = 10000;
-    std::atomic<int> counter{0};
+    stdlike::atomic<int> counter{0};
 
     auto worker = [&] {
         for (int i = 0; i < operations_per_thread; ++i) {

@@ -1,9 +1,8 @@
 #pragma once
 
 #include <cassert>
-#include <condition_variable>
+#include "../../Utils/StdLike.hpp"
 #include <cstddef>
-#include <mutex>
 
 namespace renn::sync {
 
@@ -11,8 +10,8 @@ class WaitGroup {
   private:
     /* +---+---+---+---+---+---+---+---+ */
 
-    std::mutex mtx_;
-    std::condition_variable all_done_;
+    stdlike::mutex mtx_;
+    stdlike::condition_variable all_done_;
     size_t count_{0};
 
     /* +---+---+---+---+---+---+---+---+ */

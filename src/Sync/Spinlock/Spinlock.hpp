@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Preamble.hpp"
-#include <atomic>
+#include "../../Utils/StdLike.hpp"
 #include <chrono>
 #include <cstdint>
 
@@ -15,7 +15,7 @@ class Spinlock {
     static constexpr uint32_t SPIN_INITIAL_BACKOFF = 4;
     static constexpr uint32_t SPIN_MAX_BACKOFF = 1024;
 
-    alignas(CACHE_LINE_SIZE) std::atomic<bool> flag_{false};
+    alignas(CACHE_LINE_SIZE) stdlike::atomic<bool> flag_{false};
 
     /* +---+---+---+---+---+---+---+---+---+---+---+---+---+ */
 

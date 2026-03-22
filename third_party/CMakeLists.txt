@@ -1,13 +1,5 @@
 INCLUDE(FetchContent)
 
-# GoogleTest
-FetchContent_Declare(
-    googletest
-      GIT_REPOSITORY https://github.com/google/googletest.git
-      GIT_TAG main
-)
-
-
 # sure ^-^
 FetchContent_Declare(
     sure
@@ -43,9 +35,35 @@ FetchContent_Declare(
     GIT_TAG master
 )
 
+IF(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  IF(RENN_BUILD_UNIT_TESTS OR RENN_WITH_TWIST)
+    FetchContent_Declare(
+      googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG main
+    )
+    SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+  ENDIF()
+
+  IF(RENN_WITH_TWIST)
+    MESSAGE(STATUS "[renn] : TWIST [ON]")
+
+    SET(TWIST_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    SET(TWIST_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    SET(TWIST_FAULTY ON CACHE BOOL "ENABLES TWIST FAULT INJECTION" FORCE)
+    SET(TWIST_SIM ON CACHE BOOL "ENABLES TWIST DETERMINISTIC SIMULATION" FORCE)
+
+    FetchContent_Declare(
+      twist
+        GIT_REPOSITORY https://gitlab.com/Lipovsky/twist.git
+        GIT_TAG master
+    )
+    FetchContent_MakeAvailable(twist)
+  ENDIF()
+ENDIF()
 
 FetchContent_MakeAvailable(
-  googletest
   sure
   sure-stack
   ntrusive

@@ -3,8 +3,7 @@
 #include "../Core/Env.hpp"
 #include "../Time/ITimerService.hpp"
 #include "Infra/Time/TimerQueue.hpp"
-#include <condition_variable>
-#include <mutex>
+#include "../../Utils/StdLike.hpp"
 #include <ntrusive/intrusive.hpp>
 
 namespace renn::rt {
@@ -16,8 +15,8 @@ class RunLoop : public IExecutor, public time::ITimerService {
     IntrusiveList<TaskBase> tasks_;
     time::TimerQueue timers_;
 
-    std::mutex mtx_;
-    std::condition_variable condvar_;
+    stdlike::mutex mtx_;
+    stdlike::condition_variable condvar_;
 
     bool stop_requested_{false};
 
