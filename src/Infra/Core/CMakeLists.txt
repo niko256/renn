@@ -1,11 +1,15 @@
 ADD_LIBRARY(RtCore INTERFACE)
 
-TARGET_INCLUDE_DIRECTORIES(RtCore INTERFACE
-  ${CMAKE_CURRENT_SOURCE_DIR}/..
+TARGET_INCLUDE_DIRECTORIES(
+  RtCore
+    INTERFACE
+      ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-TARGET_LINK_LIBRARIES(RtCore INTERFACE
-  third_party_ntrusive
-  Utils
-  third_party_function2
+TARGET_LINK_LIBRARIES(
+  RtCore
+    INTERFACE
+      third_party_ntrusive
+      Utils
+      third_party_function2
 )

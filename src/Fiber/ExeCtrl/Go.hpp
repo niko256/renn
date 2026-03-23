@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../Infra/Core/IExecutor.hpp"
 #include "../../Utils/Routine.hpp"
+#include "Core/Env.hpp"
 
 namespace renn::fiber {
 
-void go(rt::IExecutor&, utils::Routine);
+void go(rt::Env, utils::Routine);
 
 void go(utils::Routine);
 

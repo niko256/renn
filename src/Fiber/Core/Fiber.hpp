@@ -2,6 +2,7 @@
 
 #include "../../Infra/Core/IExecutor.hpp"
 #include "../../Infra/Core/Task.hpp"
+#include "../../Infra/Core/Env.hpp"
 #include "../Coroutine/Coro.hpp"
 #include "../Utils/Routine.hpp"
 #include "Awaiter.hpp"
@@ -19,14 +20,14 @@ class Fiber : public TaskBase {
     /* +---+---+---+---+---+---+---+---+ */
 
     renn::Coroutine coro_;
-    rt::IExecutor& sched_;
+    rt::Env sched_;
     IAwaiter* awaiter_{};
     static thread_local Fiber* current_;
 
     /* +---+---+---+---+---+---+---+---+ */
 
   public:
-    explicit Fiber(rt::IExecutor&, utils::Routine);
+    explicit Fiber(rt::Env, utils::Routine);
 
     void schedule();
     void run() noexcept override;

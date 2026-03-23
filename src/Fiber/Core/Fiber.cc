@@ -1,6 +1,7 @@
 #include "Fiber.hpp"
 #include "../../Utils/Assert.hpp"
 #include "Awaiter.hpp"
+#include "Core/Env.hpp"
 #include "Coro.hpp"
 #include "Handle.hpp"
 #include <cassert>
@@ -10,12 +11,12 @@ namespace renn::fiber {
 
 thread_local Fiber* Fiber::current_ = nullptr;
 
-Fiber::Fiber(rt::IExecutor& sched, utils::Routine routine)
+Fiber::Fiber(rt::Env sched, utils::Routine routine)
     : coro_(std::move(routine)),
       sched_(sched) {}
 
 void Fiber::schedule() {
-    sched_.submit(this);
+    rt::executor(sched_).submit(this);
 }
 
 void Fiber::run() noexcept {
@@ -65,6 +66,6 @@ Coroutine& Fiber::get_coro() {
 
 /* get internal scheduler */
 rt::IExecutor& Fiber::current_scheduler() const {
-    return sched_;
+    return rt::executor(sched_);
 }
 };  // namespace renn::fiber
