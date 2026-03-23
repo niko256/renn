@@ -10,20 +10,26 @@ SET(FIBER_FFS_SOURCES
 )
 
 
-ADD_LIBRARY(Fiber STATIC
-  ${FIBER_CORE_SOURCES}
-  ${FIBER_FFS_SOURCES}
+ADD_LIBRARY(
+  Fiber
+    STATIC
+      ${FIBER_CORE_SOURCES}
+      ${FIBER_FFS_SOURCES}
 )
 
 
-TARGET_INCLUDE_DIRECTORIES(Fiber PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/..
+TARGET_INCLUDE_DIRECTORIES(
+  Fiber
+    PUBLIC
+      ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
 
-TARGET_LINK_LIBRARIES(Fiber PUBLIC
-  third_party_ntrusive
-  Coroutine
-  RtCore
-  Utils
+TARGET_LINK_LIBRARIES(
+  Fiber
+    PUBLIC
+      third_party_ntrusive
+      Coroutine
+      RtCore
+      Utils
 )
