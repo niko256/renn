@@ -3,12 +3,15 @@ ADD_LIBRARY(Event STATIC
 )
 
 
-TARGET_INCLUDE_DIRECTORIES(Event PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:include/Event>
+TARGET_INCLUDE_DIRECTORIES(
+  Event
+    PUBLIC
+      ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-TARGET_LINK_LIBRARIES(Event PUBLIC
-  third_party_futex_like
-  Utils
+TARGET_LINK_LIBRARIES(
+  Event
+    PUBLIC
+      third_party_futex_like
+      Utils
 )

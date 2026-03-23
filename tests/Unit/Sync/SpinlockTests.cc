@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 #include <chrono>
 #include <future>
-#include "../../Utils/StdLike.hpp"
+#include "../Utils/StdLike.hpp"
 #include <vector>
 
 using namespace renn;
